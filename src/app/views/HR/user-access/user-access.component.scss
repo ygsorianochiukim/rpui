@@ -1,0 +1,15 @@
+input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+}
+ion-list{
+    background-color: unset !important;
+}
+ion-item{
+    &::part(native){
+        background-color: #fff !important;
+        border:none !important;
+        box-shadow: unset !important;
+    }
+}

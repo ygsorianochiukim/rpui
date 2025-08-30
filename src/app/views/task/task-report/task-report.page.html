@@ -1,0 +1,269 @@
+<div class="backgroundCover h-dvh">
+  <div class="header p-4 w-full flex flex-row gap-2 items-center justify-end">
+    <button 
+      (click)="showFilter()" 
+      class="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+    >
+      <!-- <lucide-icon [img]="Funnel" class="text-gray-600"></lucide-icon> -->
+    </button>
+  </div>
+
+  <div class="p-6 h-[90%] overflow-auto">
+    <div class="mb-8">
+      <header class="text-3xl font-semibold  text-gray-900">Report Progress</header>
+    </div>
+    <div 
+      class=" p-6 !mb-5 shadow-sm border border-gray-100 transition-all duration-300"
+      *ngIf="isVisible"
+      [@slideDown]
+    >
+      <label class="font-bold  text-lg text-gray-800 mb-4 block">Select Employees</label>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div *ngFor="let user of usersList" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+          <input
+            type="checkbox"
+            [id]="'user-' + user.s_bpartner_employee_id"
+            (change)="onUserSelectChange($event, user)"
+            class="w-4 h-4 text-blue-600 rounded focus:ring-blue-500"
+          />
+          <label 
+            [for]="'user-' + user.s_bpartner_employee_id"
+            class="text-sm font-medium text-gray-700 cursor-pointer"
+          >
+            {{ user.firstname }} {{ user.lastname }}
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white rounded-2xl pb-6 mb-8 shadow-sm border border-gray-100">
+      <div class="flex justify-center items-center flex-col">
+        <h2 class=" text-2xl font-semibold text-gray-800 mb-6 text-center">Your Task Reports</h2>
+        <div class="relative w-full flex flex-col items-center">
+          <canvas
+            baseChart
+            class="!w-[80%] !h-[80%]"
+            [type]="chartType"
+            [data]="chartData"
+            [options]="chartOptions"></canvas>
+          <div class="flex justify-between  items-center w-[90%] mt-5">
+            <div class="text-center">
+              <header>Own Progress</header>
+              <div class="flex flex-row gap-2">
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-gray-800">
+                    {{ Math.round(reportProgress?.ACTIVE || 0) }}%
+                  </div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Active</div>
+                </div>
+                <div class="w-1 h-8 bg-gray-600"></div>
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-gray-800">
+                    {{ Math.round(reportProgress?.DEADLINE || 0) }}%
+                  </div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Pending</div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center" *ngIf="reportProgress">
+              <header>Team Progress</header>
+              <div class="flex flex-row gap-2">
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-gray-800">
+                    {{ Math.round(reportProgress.Team_Total_Active || 0) }}%
+                  </div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Active</div>
+                </div>
+                <div class="w-1 h-8 bg-gray-600"></div>
+                <div class="text-center">
+                  <div class="text-2xl font-bold text-gray-800">
+                    {{ Math.round(reportProgress.Team_Total_Pending || 0) }}%
+                  </div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Pending</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-6">
+      <h2 class="text-xl  font-bold text-gray-800 mb-6">Direct Team Members</h2>
+      <div *ngFor="let user of usersProgress; let i = index" class="mb-4">
+        <div 
+          class="team-leader-card bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300 cursor-pointer"
+          [class.expanded]="expandedTeams.has(i)"
+          (click)="toggleTeam(i)"
+        >
+          <div class="flex justify-between items-center mb-4">
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-4">
+                <div class="flex flex-col">
+                  <div class="flex gap-2 flex flex-col">
+                    <h3 class="font-semibold text-gray-800 !m-0 text-lg">{{ getDisplayName(user.name) }}</h3>
+                    <span 
+                      *ngIf="isTeamLeader(user)" 
+                      class="bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full font-medium"
+                    >
+                      {{ user.members.length }} members
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+
+              <div class="relative w-12 h-12">
+                <canvas
+                  baseChart
+                  [data]="user.chart"
+                  [type]="'doughnut'"
+                  [options]="getMiniChartOptions()"
+                  class="!w-full !h-full"
+                ></canvas>
+              </div>
+
+              <lucide-icon 
+                *ngIf="isTeamLeader(user)"
+                [img]="ChevronDown" 
+                class="text-gray-400 transition-transform duration-300 hidden"
+                [class.rotate-180]="expandedTeams.has(i)"
+              ></lucide-icon>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <div class="text-center">
+              <header>Own Progress</header>
+              <div class="flex flex-row gap-2">
+                <div class="text-center">
+                  <div class="text-xl font-bold text-gray-800">
+                    {{ Math.round(user.ACTIVE || 0) }}%
+                  </div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Active</div>
+                </div>
+                <div class="w-1 h-8 bg-gray-600"></div>
+                <div class="text-center">
+                  <div class="text-xl font-bold text-gray-800">
+                    {{ Math.round(user.DEADLINE || 0) }}%
+                  </div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Pending</div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center">
+              <header>Team Progress</header>
+              <div class="flex flex-row gap-2">
+                <div class="text-center">
+                  <div class="text-xl font-bold text-gray-800">
+                    {{ Math.round(user.TEAM_ACTIVE_PERCENT) }}%
+                  </div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Active</div>
+                </div>
+                <div class="w-1 h-8 bg-gray-600"></div>
+                <div class="text-center">
+                  <div class="text-xl font-bold text-gray-800">
+                    {{ Math.round(user.TEAM_PENDING_PERCENT || 0) }}%
+                  </div>
+                  <div class="text-xs text-gray-500 uppercase tracking-wide">Pending</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div 
+            *ngIf="isTeamLeader(user) && expandedTeams.has(i)"
+            class="mt-6 space-y-3 animate-fade-in">
+            <div *ngFor="let member of user.members" class="team-member-item bg-gray-50 rounded-xl relative hover:bg-gray-100 transition-colors duration-200">
+              <div class="flex justify-between items-center">
+                <div class="flex flex-col">
+                  <h4 class="font-medium text-gray-800">{{ getDisplayName(member.name) }}</h4>
+                </div>
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center gap-2 text-sm">
+                    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                    <span class="text-gray-600">{{ Math.round(member.ACTIVE || 0) }}% Active</span>
+                  </div>
+                  <div class="flex items-center gap-2 text-sm">
+                    <div class="w-2 h-2 bg-red-400 rounded-full"></div>
+                    <span class="text-gray-600">{{ Math.round(member.DEADLINE || 0) }}% Pending</span>
+                  </div>
+                  <div class="w-8 h-8">
+                    <canvas
+                      baseChart
+                      [data]="member.chart"
+                      [type]="'doughnut'"
+                      [options]="getMiniChartOptions()"
+                      class="!w-full !h-full"
+                    ></canvas>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="member.members && member.members.length > 0" class="mt-3 ml-4">
+                <ng-container *ngFor="let subMember of member.members">
+                  <div class="team-member-item bg-white rounded-lg p-3 mb-2 relative">
+                    <div class="absolute -left-4 top-1/2 w-3 h-px bg-gray-300"></div>
+                    <div class="flex justify-between items-center">
+                      <div>
+                        <h5 class="font-medium text-gray-700 text-sm">{{ getDisplayName(subMember.name) }}</h5>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1 text-xs">
+                          <div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>
+                          <span class="text-gray-600">{{ Math.round(subMember.ACTIVE || 0) }}%</span>
+                        </div>
+                        <div class="flex items-center gap-1 text-xs">
+                          <div class="w-1.5 h-1.5 bg-red-300 rounded-full"></div>
+                          <span class="text-gray-600">{{ Math.round(subMember.DEADLINE || 0) }}%</span>
+                        </div>
+                        <div class="w-6 h-6">
+                          <canvas
+                            baseChart
+                            [data]="subMember.chart"
+                            [type]="'doughnut'"
+                            [options]="getMiniChartOptions()"
+                            class="!w-full !h-full"
+                          ></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.team-leader-card {
+  border-left: 4px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.team-leader-card:hover,
+.team-leader-card.expanded {
+  border-left-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+</style>

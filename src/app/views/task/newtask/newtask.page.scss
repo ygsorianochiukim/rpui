@@ -1,0 +1,33 @@
+.dateSelection{
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0 auto;
+    left: 50%;
+    width: 90%;
+}
+ion-list{
+  background-color: transparent !important;
+  ion-item{
+    &::part(native){
+      background-color: transparent !important;
+      box-shadow: unset !important;
+      padding: unset !important;
+    }
+    .item-native{
+      background-color: transparent !important;
+    }
+    &::placeholder{
+        color: #000;
+    }
+    background-color: transparent !important;
+  }
+}
+label, header{
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+header{
+  font-size: 20px;
+}

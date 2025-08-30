@@ -1,0 +1,33 @@
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+}
+.team-leader-card {
+  border-left: 4px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.team-leader-card:hover,
+.team-leader-card.expanded {
+  border-left-color: #3b82f6;
+  transform: translateY(-2px);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}

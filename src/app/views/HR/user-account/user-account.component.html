@@ -1,0 +1,74 @@
+<div class="h-dvh w-full backgroundCover flex flex-col justify-start items-center">
+  <img src="../assets/logo2.png" class="w-4/6 mt-5" alt="">
+
+  <div class="w-[90%] rounded-[24px] border-2 border-black mt-10 p-2">
+    <!-- <div class="absolute w-[140%] rounded-full h-[80%] border-2 mt-[8%] absolute bg-transparent border-black">
+    </div> -->
+    <div class="rounded-[18px] bg-secondary p-5">
+      <header class="text-3xl  text-center mb-5">Registration Form</header>
+      <form (ngSubmit)="addNewUser()">
+        <div>
+          <input type="text" name="first_name" [(ngModel)]="UserField.firstname" class="w-full border p-2 rounded-md" id="" placeholder="First Name">
+        </div>
+        <div class="mt-2">
+          <input type="text" name="middle_name" [(ngModel)]="UserField.lastname" class="w-full border p-2 rounded-md" id="" placeholder="Middle Name">
+        </div>
+        <!-- <div class="mt-2 flex flex-row gap-2">
+          <input type="text" name="last_name" [(ngModel)]="UserField.last_name" class="w-full border p-2 rounded-md" id="" placeholder="Last Name">
+          <ion-list class="!p-0 bg-none">
+            <ion-item name="suffix"  [(ngModel)]="UserField.suffix" class="w-full border pl-2 text-black rounded-md bg-none">
+              <ion-select placeholder="Suffix">
+                <ion-select-option value="">Select Suffix</ion-select-option>
+                <ion-select-option value="Jr.">Jr.</ion-select-option>
+                <ion-select-option value="Sr.">Sr.</ion-select-option>
+                <ion-select-option value="I">I</ion-select-option>
+                <ion-select-option value="II">II</ion-select-option>
+                <ion-select-option value="III">III</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+        </div> -->
+        <div class="mt-2 flex flex-row gap-2">
+          <input type="date" name="birthdate" [(ngModel)]="UserField.birthdate" class="w-full border p-2 rounded-md" id="" placeholder="Birthday">
+          <ion-list class="!p-0 bg-none">
+            <ion-item class="w-full border pl-2 text-black rounded-md bg-none">
+              <ion-select name="sex" [(ngModel)]="UserField.sex" placeholder="Sex">
+                <ion-select-option value="">Select Gender</ion-select-option>
+                <ion-select-option value="Male">Male</ion-select-option>
+                <ion-select-option value="Female">Female</ion-select-option>
+                <ion-select-option value="Others">Others</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+        </div>
+        <!-- <div class="mt-2">
+          <input type="text" name="contact_number" [(ngModel)]="UserField.contact_number" class="w-full border p-2 rounded-md" id="" placeholder="Contact Number">
+        </div> -->
+        <div class="mt-2">
+          <input type="text" name="company_name" [(ngModel)]="UserField.companyname" class="w-full border p-2 rounded-md" id="" placeholder="Company Name">
+        </div>
+        <div class="mt-2">
+          <input type="text" name="address" [(ngModel)]="UserField.address" class="w-full border p-2 rounded-md" id="" placeholder="Address">
+        </div>
+        <div class="mt-2">
+          <input type="mail" name="email" [(ngModel)]="UserField.email" class="w-full border p-2 rounded-md" id="" placeholder="E-mail">
+        </div>
+        <div class="mt-2">
+          <input type="text" name="username" [(ngModel)]="UserField.username" class="w-full border p-2 rounded-md" id="" placeholder="Username">
+        </div>
+        <div class="mt-2">
+          <input type="password" name="password" [(ngModel)]="UserField.password" class="w-full border p-2 rounded-md" id="" placeholder="Password">
+        </div>
+        <div class="mt-2 flex flex-row justify-start items-center gap-3">
+          <input type="checkbox" name="" id="">
+          <label for="">All the information above are all correct and authentic</label>
+        </div>
+        <button class="w-full bg-primary text-white !p-3 mt-3 !rounded-md">
+          Save Changes
+        </button>
+      </form>
+    </div>
+    
+  </div>
+  
+</div>

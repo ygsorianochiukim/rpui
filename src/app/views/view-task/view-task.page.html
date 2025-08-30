@@ -1,0 +1,93 @@
+<div class="backgroundCover h-dvh">
+  <div
+    class="header p-4 w-full flex flex-row gap-2 items-center justify-end rounded-br-2xl rounded-bl-2xl"
+  >
+    <!-- <lucide-icon [img]="Circle" size="40"></lucide-icon> -->
+  </div>
+  <div class="w-full p-4 flex justify-between items-center mt-2">
+    <header class="font-semibold text-3xl font-Playfair">Task List</header>
+    <div class="flex flex-row gap-2 items-center">
+      <lucide-icon
+        [img]="Funnel"
+        size="30"
+        [strokeWidth]="2"
+        (click)="filterVisible()"
+      ></lucide-icon>
+    </div>
+  </div>
+  <div *ngIf="isFilterVisible" class="p-4 pt-0">
+    @if (this.Function != "Maker") {
+      <div>
+        <label for="" class=" font-lg text-xl">Assinged</label>
+        <ion-list class="!p-0 !mt-2">
+          <ion-item>
+            <ion-select name="assigned" [(ngModel)]="assigned" (ngModelChange)="applyFilters()">
+              <div slot="label">Select Employee</div>
+              @for (User of teamsList; track $index) {
+                <ion-select-option value={{User.s_bpartner_employee_id}}>{{User.name}}</ion-select-option>
+              }
+            </ion-select>
+          </ion-item>
+        </ion-list>
+      </div>
+    }
+    <div class="mt-2">
+      <label for="" class=" font-lg text-xl">Status</label>
+      <ion-list class="!p-0 !mt-2">
+        <ion-item>
+          <ion-select name="status" [(ngModel)]="status" (ngModelChange)="applyFilters()">
+            <div slot="label">Select Status</div>
+            @for (type of types; track $index) {
+              <ion-select-option [value]="type">{{ type }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+    <div class="mt-2">
+      <label for="" class=" font-lg text-xl">Task Type</label>
+      <ion-list class="!p-0 !mt-2">
+        <ion-item>
+          <ion-select name="type" [(ngModel)]="type" (ngModelChange)="applyFilters()">
+            <div slot="label">Select Type</div>
+            @for (category of Category; track $index) {
+              <ion-select-option [value]="category">{{ category }}</ion-select-option>
+            }
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+  </div>
+  <div class="flex flex-col mt-1 px-5 font-Playfair p-2 gap-y-3 pt-0 overflow-auto h-[80%]">
+    @for (task of DuesList;track $index) {
+      <div
+        class="bg-white shadow-md rounded-xl border-l-5 border-primary p-3 flex justify-between items-center"
+        [ngClass]="{'!bg-red-700 text-white border-l-5': task.due_date <= dateToday && task.task_status !== 'COMPLETE','bg-green-500 border-l-5': task.task_status === 'COMPLETE'}">
+        <div>
+          <header class="font-semibold text-xl">{{task.task_name | titlecase}}</header>
+          <span class="line-clamp-2 font-Lora"> {{task.due_date | date}} </span>
+          <span class="line-clamp-2 font-Lora">Assignee: <span class="text-black-950 ">{{task.firstname | titlecase}} {{task.lastname | titlecase}}</span></span>
+        </div>
+        <div class="flex flex-row items-center gap-4">
+          <span (click)="viewinfo(task.task_i_information_id)"> <lucide-icon [img]="Eye"></lucide-icon> </span>
+          @if (this.Function != "Maker") {
+            <span (click)="Remove(task.task_i_information_id)"> <lucide-icon [img]="Trash"></lucide-icon></span>
+          }
+        </div>
+      </div>
+    }
+    <span class=" font-semibold text-2xl mt-2">
+      COMPLETE
+    </span>
+    @for (complete of TaskCompleteList;track $index) {
+      <div class="border rounded-xl border-l-5 border-primary p-3 flex justify-between items-center">
+        <div>
+          <header class="font-semibold text-xl font-Playfair"><del>{{complete?.task?.task_name | titlecase}}</del></header>
+          <span class="line-clamp-2 font-Lora">Date Completed :<span class="text-green-950  font-semibold">{{complete.TaskDateComplete}}</span></span>
+        </div>
+        
+      </div>
+    }
+  </div>
+  
+</div>

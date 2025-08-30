@@ -1,0 +1,144 @@
+<div class="backgroundCover h-dvh">
+  <div class="header p-5 w-full flex flex-row gap-2 items-center justify-end rounded-br-2xl rounded-bl-2xl">
+    <header class="font-Playfair text-2xl font-semibold t-1">Task Information</header>
+  </div>
+  <form (ngSubmit)="submitTask()" class="px-5 overflow-scroll h-[90%]">
+    <div class="mt-3">
+      <label>Task Name <span class="text-red-500">*</span></label>
+      <input type="text" name="task_name" [(ngModel)]="taskField.task_name"
+        required
+        #taskName="ngModel"
+        class="w-full rounded-md border-amber-950 border p-3">
+      <div *ngIf="taskName.invalid && taskName.touched" class="text-red-500 text-sm">
+        Task Name is required
+      </div>
+    </div>
+    <div class="mt-1">
+      <label>Description <span class="text-red-500">*</span></label>
+      <textarea name="description" [(ngModel)]="taskField.description"
+        required
+        #description="ngModel"
+        class="w-full border !rounded-md border-amber-950 !h-20 p-2"></textarea>
+      <div *ngIf="description.invalid && description.touched" class="text-red-500 text-sm">
+        Description is required
+      </div>
+    </div>
+    <div class="mt-1">
+      @if(UserFunction != "Maker") {
+        <label for="">Assign Employee <span class="text-red-500">*</span> </label>
+        <div class="flex flex-row justify-between gap-3">
+          <input type="text" name="nameSelected" [(ngModel)]="nameSelected" id="" class="w-full border p-3 rounded-md">
+          <button class="border !p-3 bg-primary text-white !px-5 !rounded-md" (click)="openList()">+</button>
+        </div>
+      }
+    </div>
+    <header class="text-xl font-semibold mt-2 border-b-2 pb-2">
+      Add Steps
+    </header>
+    <div class="mt-2">
+      <label for="">Step Description</label>
+      <div class="flex flex-row gap-2 items-center justify-between">
+        <input type="text" name="task_steps_description" [(ngModel)]="StepsField.task_steps_description" id="" class="w-full rounded-md border-amber-950 border p-3">
+      </div>
+    </div>
+    <header class="text-xl font-semibold mt-2 border-b-2 pb-2">
+      Add Notes
+    </header>
+    <div class="mt-2">
+      <label for="">Notes</label>
+      <textarea name="task_note" [(ngModel)]="NotesField.task_note" id="" class="w-full rounded-md border-amber-950 border p-3 h-50"></textarea>
+    </div>
+    <header class="text-xl font-semibold mt-2 border-b-2 pb-2">
+      Add Files
+    </header>
+    <div class="mt-2">
+      <label for="">Files</label>
+      <div class="flex flex-row gap-2 items-center justify-between">
+        <input type="file" name="" (change)="onFileSelected($event)" id="" class="w-full rounded-md border-amber-950 border p-3">
+      </div>
+    </div>
+    <header class="text-xl font-semibold mt-3 border-b-2 pb-2">
+      Due Date
+    </header>
+    <div class="mt-2">
+      <label for="">Due Date <span class="text-red-500">*</span></label>
+      <ion-list class="!p-0 bg-none">
+        <ion-item  class="w-full border pl-2 text-black rounded-md bg-none">
+          <ion-select name="dueDateSelected" [(ngModel)]="dueDateSelected" placeholder="Due Date" (ngModelChange)="dateSelected()">
+            <ion-select-option value="Today">Today</ion-select-option>
+            <ion-select-option value="Tomorrow">Tomorrow</ion-select-option>
+            <ion-select-option value="Next Week">Next Week</ion-select-option>
+            <ion-select-option value="datePicker">Pick a Date</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+      <div *ngIf="showDateSelection" class="dateSelection p-4 bg-white rounded-md shadow-md z-50">
+        <span (click)="close()">Close</span>
+        <ion-datetime name="due_date" [(ngModel)]="DueDateField.due_date" class="w-full"></ion-datetime>
+      </div>  
+    </div>
+    <header class="text-xl font-semibold mt-3 border-b-2 pb-2">
+      Repeat
+    </header>
+    <div class="mt-2">
+      <label for="">Repeat</label>
+
+      <ion-list class="!p-0 bg-none">
+        <ion-item  class="w-full border pl-2 text-black rounded-md bg-none">
+          <ion-select name="repeat_frequency" [(ngModel)]="DueRepeatField.repeat_frequency" placeholder="Repeat Freqency">
+            <ion-select-option value="Daily">Daily</ion-select-option>
+            <ion-select-option value="Weekdays">Weekdays</ion-select-option>
+            <ion-select-option value="Monthly">Monthly</ion-select-option>
+            <ion-select-option value="Yearly">Yearly</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+    <header class="text-xl font-semibold mt-3 border-b-2 pb-2">
+      Remind Me
+    </header>
+    <div class="mt-2">
+      <label for="">Remind</label>
+      <ion-list class="!p-0 bg-none">
+        <ion-item  class="w-full border pl-2 text-black rounded-md bg-none">
+          <ion-select name="remind_task" [(ngModel)]="DueRemindField.remind_task" placeholder="Reminders">
+            <ion-select-option value="Later Today">Later Today</ion-select-option>
+            <ion-select-option value="Tomorrow">Tomorrow</ion-select-option>
+            <ion-select-option value="Next Week">Next Week</ion-select-option>
+            <ion-select-option value="Yearly">Pick a Date</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+    <button class="w-full bg-primary !p-4 mt-4 text-white !rounded-full">
+      Save Changes
+    </button>
+  </form>
+</div>
+<app-modal [isVisible]="listisVisible" [titleHeader]="listtitleHeader" (closeModal)="closeNoteModal()">
+  <form>
+    <div class="mt-2">
+      <label for="" class="text-2xl font-Playfair">Search</label>
+      <input 
+        type="text" 
+        placeholder="Search"
+        class="w-full p-2 rounded-md border"
+        [(ngModel)]="searchTerm"
+        name="search"
+        (input)="filterUsers()"
+      >
+    </div>
+    <div class="max-h-[300px] overflow-auto mt-6 duration-100">
+      @for (user of filteredUsers; track $index) {
+        <div class="border-b-2 p-2 flex flex-row justify-between">
+          <div>
+            {{ user.firstname }} {{ user.lastname }}
+          </div>
+          <div>
+            <button class="!p-2 bg-primary text-white !rounded-md" (click)="getId(user.s_bpartner_employee_id!)">Assign</button>
+          </div>
+        </div>
+      }
+    </div>
+  </form>
+</app-modal>

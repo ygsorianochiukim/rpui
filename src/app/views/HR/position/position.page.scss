@@ -1,0 +1,17 @@
+ion-list{
+  background-color: transparent !important;
+  ion-item{
+    &::part(native){
+      background-color: transparent !important;
+      box-shadow: unset !important;
+      padding: unset !important;
+    }
+    .item-native{
+      background-color: transparent !important;
+    }
+    &::placeholder{
+        color: #000;
+    }
+    background-color: transparent !important;
+  }
+}

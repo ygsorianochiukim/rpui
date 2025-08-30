@@ -1,0 +1,27 @@
+<div class="h-dvh backgroundCover w-full  flex flex-col justify-start items-center">
+  <img src="../assets/logo2.png" class="w-4/6 mt-5" alt="">
+  <div class="w-[90%] mt-5 flex flex-row items-center justify-between">
+    <div class="flex flex-row justify-between w-full items-center">
+      <header class="text-2xl font-semibold font-Playfair">Users List</header>
+      <form>
+        <input type="text" name="searchTerm" [(ngModel)]="searchTerm" (input)="onSearchChange()" class="rounded-2xl border p-2" placeholder="Search..">
+      </form>
+    </div>
+    <div class="flex flex-row justify-between items-center gap-2">
+    </div>
+  </div>
+  <div class="w-[90%] h-[80%] overflow-auto flex flex-col gap-y-3 mt-3">
+    @for (user of filteredUsers; track $index) {
+      <div class="card p-2 border-b-2 border-primary flex flex-row justify-between items-center">
+        <div>
+          <div class="font-semibold font-Playfair">
+            {{user.companyname}} {{user.lastname}}
+          </div>
+        </div>
+        <div>
+          <button class="cursor-pointer !p-2 !rounded-xl bg-primary" (click)="viewinformation(user.s_bpartner_employee_id!)"><lucide-icon [img]="Eye" color="#fff"></lucide-icon> </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

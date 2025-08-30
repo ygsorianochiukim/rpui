@@ -1,0 +1,22 @@
+<div class="h-dvh w-full backgroundCover flex flex-col justify-start items-center">
+  <img src="../assets/logo2.png" class="w-4/6 mt-5" alt="">
+
+  <div class="w-[90%] rounded-[24px] border-2 border-black mt-10 p-2">
+    <div class="rounded-[18px] bg-white p-4">
+      <header class="font-Playfair text-xl font-semibold">Announcement Information</header>
+      <form (ngSubmit)="newAnnouncement()">
+        <div>
+          <label for="" class="font-semibold font-Playfair">Description</label>
+          <textarea name="announcement_description" [(ngModel)]="AnnouncementField.announcement_description" id="" class="w-full rounded-md border !h-20 p-2"></textarea>
+        </div>
+        <div>
+          <label for="" class="font-semibold font-Playfair">Date Validity</label>
+          <ion-datetime name="date_validity" [(ngModel)]="AnnouncementField.date_validity" class="w-full rounded-md"></ion-datetime> 
+        </div>
+        <input type="submit" value="Save Changes" class="w-full bg-primary !text-white !mt-3 !rounded-full p-3">
+      </form>
+    </div>
+    
+  </div>
+</div>
+

@@ -1,0 +1,89 @@
+<div class="w-full p-5 h-dvh backgroundCover overflow-auto">
+  <div class="mt-5 flex justify-center flex-row">
+    <img src="assets/icon.png" class="w-26 m-5" alt="">
+  </div>
+  <div class="text-center mb-3">
+    <header class="text-2xl font-Playfair font-semibold text-center ">
+      {{displayUserProfile.firstname | titlecase}} {{displayUserProfile.lastname | titlecase}}
+    </header>
+    <span class="text-xl font-Lora">{{displayUserProfile.user_access?.position?.department}} - {{displayUserProfile.user_access?.position?.function}}</span>
+  </div>
+  <div class="font-semibold p-5 rounded-2xl border-t-8 border-primary bg-white shadow-md">
+    <header class="text-xl font-Playfair">About</header>
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center gap-6 px-4">
+        <div><lucide-icon [img]="Cake"></lucide-icon></div>
+        <div class="font-Lora">
+          <div class="font-normal text-base">Birthday</div>
+          <div class="text-base leading-none">{{displayUserProfile.birthdate | date}}</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-6 px-4">
+        <div><lucide-icon [img]="Phone"></lucide-icon></div>
+        <div class="font-Lora">
+          <div class="font-normal">Contact Number</div>
+          <div class="text-base leading-none">0{{displayUserProfile.contact_no}}</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-6 px-4">
+        <div><lucide-icon [img]="Mail"></lucide-icon></div>
+        <div class="font-Lora">
+          <div class="font-normal">Email</div>
+          <div class="text-base leading-none" *ngIf="displayUserProfile.email == ''">-</div>
+          <div class="text-base leading-none" *ngIf="displayUserProfile.email != ''">{{displayUserProfile.email}}</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-6 px-4">
+        <div><lucide-icon [img]="Address"></lucide-icon></div>
+        <div class="font-Lora">
+          <div class="font-normal">Address</div>
+          <div class="text-base leading-none" *ngIf="displayUserProfile.address == ''">-</div>
+          <div class="text-sm leading-none" *ngIf="displayUserProfile.address != ''">{{displayUserProfile.address | titlecase}}</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-6 px-4">
+        <div><lucide-icon [img]="Gender"></lucide-icon></div>
+        <div class="font-Lora">
+          <div class="font-normal">Sex</div>
+          <div class="text-base leading-none" *ngIf="displayUserProfile.sex == ''">-</div>
+          <div class="text-base leading-none" *ngIf="displayUserProfile.sex != ''">{{displayUserProfile.sex}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class=" font-semibold mt-5 p-5 rounded-2xl border-t-8 border-primary bg-white shadow-md">
+    <header class="text-2xl font-Playfair">Government</header>
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center gap-6 px-4">
+        <div><lucide-icon [img]="Landmark"></lucide-icon></div>
+        <div class="font-Lora">
+          <div class="font-normal">SSS</div>
+          <div class="text-base leading-none">{{displayUserProfile.sss_no}}</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-6 px-4">
+        <div><lucide-icon [img]="Landmark"></lucide-icon></div>
+        <div class="font-Lora">
+          <div class="font-normal">PHILHEALTH</div>
+          <div class="text-base leading-none">0{{displayUserProfile.phic_no}}</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-6 px-4">
+        <div><lucide-icon [img]="Landmark"></lucide-icon></div>
+        <div class="font-Lora">
+          <div class="font-normal">PAG-IBIG</div>
+          <div class="text-base leading-none" *ngIf="displayUserProfile.email == ''">-</div>
+          <div class="text-base leading-none" *ngIf="displayUserProfile.email != ''">{{displayUserProfile.hdmf_no}}</div>
+        </div>
+      </div>
+      <div class="flex items-center gap-6 px-4">
+        <div><lucide-icon [img]="Landmark"></lucide-icon></div>
+        <div class="font-Lora">
+          <div class="font-normal">TIN</div>
+          <div class="text-base leading-none" *ngIf="displayUserProfile.tin_no == null || displayUserProfile.tin_no == 0">-</div>
+          <div class="text-base leading-none" *ngIf="displayUserProfile.tin_no != 0">{{displayUserProfile.tin_no}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

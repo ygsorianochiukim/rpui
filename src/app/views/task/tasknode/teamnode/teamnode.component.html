@@ -1,0 +1,31 @@
+<div class="relative pl-6 border-l border-gray-300 mt-3">
+  <!-- Node Header -->
+  <div class="flex items-center gap-3 p-3 bg-white rounded-xl shadow-sm hover:shadow-lg transition cursor-pointer" (click)="toggleExpand()">
+    <div class="w-14 h-14">
+      <canvas
+        baseChart
+        [type]="'doughnut'"
+        [data]="chartData"
+        [options]="chartOptions"
+      ></canvas>
+    </div>
+    <div class="flex-1">
+      <div class="font-semibold text-gray-800">{{ node.name }}</div>
+      <div class="text-gray-500 text-sm">ID: {{ node.s_bpartner_employee_id }}</div>
+    </div>
+    <div class="text-gray-400">
+      {{ expanded ? '▼' : '▶' }}
+    </div>
+  </div>
+
+  <!-- Child Nodes -->
+  <div
+    class="ml-4 transition-all duration-500 overflow-hidden"
+    [class.max-h-0]="!expanded"
+    [class.max-h-[1000px]]="expanded"
+  >
+    <ng-container *ngFor="let member of node.members">
+      <app-teamnode [node]="member"></app-teamnode>
+    </ng-container>
+  </div>
+</div>

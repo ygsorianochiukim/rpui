@@ -1,0 +1,59 @@
+<div class="h-dvh w-full backgroundCover flex flex-col justify-start items-center">
+  <img src="../assets/logo2.png" class="w-4/6 mt-5" alt="">
+
+  <div class="w-[90%] rounded-[24px] border-2 border-black mt-10 p-2">
+    <div class="rounded-[18px] bg-white p-4">
+      <header class="text-3xl text-center mb-2 font-Playfair">Role information</header>
+      <form>
+        <div>
+          <label for="" class="font-Playfair font-semibold text-xl">Role Name</label>
+          <input type="text" name="position" [(ngModel)]="PositionFields.position" id="" placeholder="Position Name" class="p-2 w-full rounded-md border-amber-950 mt-2 border">
+        </div>
+        <div class="mt-2">
+          <label for="" class="font-Playfair font-semibold text-xl">Department</label>
+          <input type="text" name="department" [(ngModel)]="PositionFields.department" id="" placeholder="Position Name" class="p-2 w-full rounded-md border-amber-950 mt-2 border">
+        </div>
+        <div class="mt-2">
+          <label for="" class="font-Playfair font-semibold text-xl">Function</label>
+          <ion-list class="!p-0 bg-none">
+            <ion-item  class="w-full border pl-2 text-black rounded-md bg-none">
+              <ion-select name="function" [(ngModel)]="PositionFields.function" placeholder="Function">
+                <ion-select-option value="">Select Function</ion-select-option>
+                <ion-select-option value="BOD">BOD</ion-select-option>
+                <ion-select-option value="Planner">Planner</ion-select-option>
+                <ion-select-option value="Maker">Maker</ion-select-option>
+                <ion-select-option value="Checker">Checker</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+        </div>
+        <button (click)="confirmBeforeSubmit()" class="!p-4 w-full mt-4 !rounded-md rounded-md bg-primary text-white">
+          Submit Changes
+        </button>
+      </form>
+    </div>
+  </div>
+  <header class="w-full pl-5 pt-5 font-bold font-Playfair text-2xl">
+    Position Availabiity
+  </header>
+  <div class="w-full p-5 flex flex-col gap-4 h-[40%] overflow-auto">
+    @for (position of positionlist; track $index) {
+      <div class="w-full border p-4 rounded-2xl items-center flex flex-row justify-between">
+        <div class="flex flex-col font-Playfair">
+          <div class="font-bold text-lg">
+            {{position.department}} - {{position.function}}
+          </div>
+          <div>
+            {{position.position}}
+          </div>
+        </div>
+        <div>
+          <button class="bg-primary !p-2 !rounded-xl">
+            <lucide-icon [img]="Pen" color="#fff"></lucide-icon>
+          </button>
+        </div>
+        
+      </div>
+    }
+  </div>
+</div>

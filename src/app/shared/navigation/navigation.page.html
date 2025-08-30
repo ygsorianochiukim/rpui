@@ -1,0 +1,59 @@
+<lucide-icon [img]="Menu" class="absolute left-3 top-2 h-10 z-10" (click)="show()"></lucide-icon>
+<div class="backdrop" *ngIf="!isHidden" (click)="hide()"></div>
+<div class="navigation hide-nav w-2/3 navbg h-dvh rounded-tr-2xl rounded-br-2xl block z-50">
+  <div class="flex flex-col justify-between h-dvh">
+    <div>
+      <div class="flex flex-col justify-start items-center border-b-2">
+        <img src="assets/icon.png" alt="" class="w-[35%] m-7">
+        <div class="w-full flex flex-col text-center mb-1">
+          <span class="w-full font-Playfair font-bold text-xl">{{User?.firstname}} {{User?.lastname}}</span>
+          <span class="w-full font-Lora font-normal">{{role}}</span>
+        </div>
+        <lucide-icon [img]="ArrowLeft" class="absolute right-2 top-2" (click)="hide()"></lucide-icon>
+      </div>
+      
+      <ul class="font-Playfair">
+        <li routerLink="/home" (click)="hide()" class="flex flex-row items-center gap-2">
+          <lucide-icon [img]="Home"></lucide-icon> <p class=" text-lg">Home</p>
+        </li>
+
+        @if (role == "HR") {
+          <li (click)="viewSubHR()" class="flex flex-row items-center gap-2">
+            <lucide-icon [img]="Users"></lucide-icon> <p class=" text-lg">Human Resource</p>
+          </li>
+          @if (subListHR) {
+            <ul class="ml-4">
+              <li routerLink="/viewEmployee" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="IdCardLanyard"></lucide-icon> <p class=" text-lg">Employee</p></li>
+              <li routerLink="/accountAccess" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="ShieldUser"></lucide-icon> <p class=" text-lg">Employee Access</p></li>
+              <li routerLink="/position" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="BriefcaseBusiness"></lucide-icon> <p class=" text-lg">Position</p></li>
+            </ul>
+          }
+        }
+
+        @if (function != "Maker") {
+          <li routerLink="/myteam" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="Network"></lucide-icon> <p class=" text-lg">My Team</p></li>
+        }
+
+        <li (click)="viewSubNav()" class="flex flex-row items-center gap-2">
+          <lucide-icon [img]="ListChecks"></lucide-icon> <p class=" text-lg">To Do List</p>
+        </li>
+          
+        @if(subList){
+          <ul class="ml-4">
+            <li routerLink="/newTask" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="ListPlus"></lucide-icon> <p class=" text-lg">Add Task</p></li>
+            <li routerLink="/viewTask" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="View"></lucide-icon> <p class=" text-lg">View Task</p></li>
+            <li routerLink="/taskReport" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="ChartArea"></lucide-icon> <p class=" text-lg">Task Reports</p></li>
+          </ul>
+        }
+
+        @if (function != "Maker") {
+          <li routerLink="/announcements" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="Megaphone"></lucide-icon> <p class=" text-lg">Announcement</p></li>
+        }
+      </ul>
+    </div>
+    <div class="text-center flex flex-row-reverse font-Lora justify-between p-2">
+      <span>Version : {{version}}</span>
+      <span>RP APP</span>
+    </div>
+  </div>
+</div>

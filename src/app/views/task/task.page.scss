@@ -1,0 +1,12 @@
+.rippleEffect{
+    animation: scaling 5s linear infinite;
+}
+@keyframes scaling {
+	0%,50%,100% {
+		scale: 1;
+	}
+	25%,75% {
+		scale: 1.1;
+	}
+}
+

@@ -1,3 +1,5 @@
+// @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+// @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
@@ -25,6 +27,7 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
+@import "tailwindcss";
 /**
  * Ionic Dark Mode
  * -----------------------------------------------------
@@ -34,4 +37,62 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+
+.font-Playfair {
+  font-family: "Playfair Display", serif;
+  font-style: normal;
+}
+
+.font-Lora {
+  font-family: "Lora", serif;
+  font-style: normal;
+}
+
+.backgroundCover {
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.920),
+      rgba(255, 255, 255, 0.920)
+    ),
+    url("assets/general.png"), #efedef;
+    background-position: center;
+    background-size: 200%;
+    background-repeat: no-repeat;
+}
+.loginbg {
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.920),
+      rgba(255, 255, 255, 0.920)
+    ),
+    url("assets/loginbg.png"), #ffffff;
+    background-position: -210px;
+    background-size: 130%;
+    background-repeat: no-repeat;
+}
+.navbg {
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.920),
+      rgba(255, 255, 255, 0.920)
+    ),
+    url("assets/general.png"), #eae1d4;
+    background-position: -200px;
+    background-size: 295%;
+    background-repeat: no-repeat;
+}
+
+.bg-primary {
+  background-color: #0c342c !important;
+}
+.border-primary {
+  border-color: #0c342c !important;
+}
+.bg-navigation {
+  background-color: #efedef;
+}
+.bg-cards {
+  background-color: #ffeacc;
+}
+.bg-secondary {
+  background-color: #b08342;
+}
+
+@import "@ionic/angular/css/palettes/dark.system.css";

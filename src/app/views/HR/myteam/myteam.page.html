@@ -1,0 +1,69 @@
+<div class="h-dvh w-full backgroundCover flex flex-col justify-start items-center">
+  <img src="../assets/logo2.png" class="w-4/6 mt-5" alt="">
+
+  <div class="w-[90%] rounded-[24px] border-2 border-black mt-10 p-2">
+    <div class="rounded-[18px] bg-white p-4">
+      <div>
+        <label for="" class="font-Playfair font-semibold text-xl">Select Employee</label>
+        <div class="flex flex-row justify-between gap-3">
+          <input type="text" name="nameSelected" [(ngModel)]="nameSelected" id="" class="w-full border p-3 rounded-md">
+          <button class="border !p-3 bg-primary text-white !px-5 !rounded-md" (click)="openList()">+</button>
+        </div>
+      </div>
+      <form (ngSubmit)="confirmBeforeSubmit()">
+        <button class="!p-3 !rounded-md w-full bg-primary text-white mt-4" id="confirmAlert">
+          Save Changes
+        </button>
+      </form>
+    </div>
+    
+  </div>
+  <header class="text-2xl w-full p-5 font-Playfair text-left font-semibold">My Team</header>
+  <div class="w-full flex flex-col gap-3 px-5 !h-[55%] overflow-auto">
+      @for (users of displayTeamList; track $index) {
+        <div class="bg-white shadow-sm p-4 rounded-xl flex flex-row justify-between items-center">
+          <div class="flex flex-col w-full ">
+            <div class="max-w-[100%]  font-semibold text-xl font-Playfair">
+              {{users.user.companyname| titlecase}}
+              {{users.user.lastname | titlecase}}
+            </div>
+            <div class="font-Lora">
+              {{ users?.user_access?.position?.position }}
+            </div>
+          </div>
+          <div class="p-2 rounded-md text-white bg-red-600 flex flex-row items-center font-sans gap-2 leading-0">
+            <lucide-icon (click)="remove(users.team_access_id)" [img]="Trash" color="#fff" [strokeWidth]="2"></lucide-icon>
+          </div>
+        </div>
+      }
+  </div>
+</div>
+
+<app-modal [isVisible]="listisVisible" [titleHeader]="listtitleHeader" (closeModal)="closeNoteModal()">
+  <form>
+    <div class="mt-2">
+      <label for="" class="text-2xl font-Playfair">Search</label>
+      <input 
+        type="text" 
+        placeholder="Search"
+        class="w-full p-2 rounded-md border"
+        [(ngModel)]="searchTerm"
+        name="search"
+        (input)="filterUsers()"
+      >
+    </div>
+    <div class="max-h-[300px] overflow-auto mt-6 duration-100">
+      @for (user of filteredUsers; track $index) {
+        <div class="border-b-2 p-2 flex flex-row justify-between">
+          <div>
+            {{ user.firstname }} {{ user.lastname }}
+          </div>
+          <div>
+            <button class="!p-2 bg-primary text-white !rounded-md" (click)="getId(user.s_bpartner_employee_id!)">Assign</button>
+          </div>
+        </div>
+      }
+    </div>
+  </form>
+</app-modal>
+

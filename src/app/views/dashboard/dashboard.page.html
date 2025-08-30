@@ -1,0 +1,39 @@
+<div class="backgroundCover h-dvh p-5">
+  <div class="header p-1 w-full flex flex-row gap-2 items-center justify-end rounded-br-2xl rounded-bl-2xl">
+    <lucide-icon routerLink="/profileView" routerLinkActive="router-link-active"  [img]="CircleUserRound" [size]="35"></lucide-icon>
+  </div>
+  <div class="w-full rounded-xl mt-3 p-5 bg-white shadow-md">
+    <header class="text-3xl font-Playfair font-semibold">WELCOME</header>
+    <span class="font-Lora text-lg">{{Name | titlecase}}</span>
+  </div>
+  <div class="mt-4">
+    <div class="border-b-2 pb-2 flex flex-row items-center justify-between mb-5">
+      <header class="font-Playfair text-2xl font-semibold gap-2 flex flex-row items-center">
+        <lucide-icon [img]="Megaphone"></lucide-icon> Announcement
+      </header>
+      <lucide-icon [img]="History"></lucide-icon>
+    </div>
+    @for (announcement of AnnouncementList; track $index) {
+      <div class="py-4 px-2 border-l-5 border-primary mt-4 rounded-md flex flex-row justify-between">
+        <header class="font-Playfair text-xl">
+          {{announcement.announcement_description | titlecase}}
+        </header>
+        <span>
+          {{announcement.date_validity | date}}
+        </span>
+      </div>
+    }
+  </div>
+
+  <div class="mt-4">
+    <div class="border-b-2 pb-2 flex flex-row items-center justify-between mb-5">
+      <header class="font-Playfair text-2xl font-semibold gap-2 flex flex-row items-center">
+        <lucide-icon [img]="Church"></lucide-icon> Verse of the Day
+      </header>
+    </div>
+    <div *ngIf="verse as v" class="p-3 rounded-xl bg-[#fafafa] shadow-md shadow-black">
+      <div class="font-semibold text-2xl font-Playfair">{{ v.ref }}</div>
+      <div class="font-Lora text-lg italic font-semibold">{{ v.text }}</div>
+    </div>
+  </div>
+</div>

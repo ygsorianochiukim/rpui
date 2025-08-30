@@ -1,0 +1,67 @@
+<div class="bg-primary h-dvh flex justify-start flex-col items-center">
+  <img src="assets/logo.png" class="w-4/6 mt-14 mb-14" alt="">
+  <div class="w-full loginbg h-full rounded-tr-[50px] rounded-tl-[50px] p-9 pt-7 bg-white">
+    <header class="font-semibold text-4xl font-Playfair">Login</header>
+    <form (ngSubmit)="login()" class="!mt-1 py-4">
+      <div>
+        <label for="" class=" text-2xl font-Lora">Username</label>
+        <div class="flex flex-row justify-between items-center border-b-5 border-primary">
+          <lucide-icon [img]="User"></lucide-icon>
+          <input type="text" name="emailOrUsername" [(ngModel)]="emailOrUsername" class="!text-lg p-2 pl-2 focus:outline-0 w-full border-gray-400 !mt-1" id="" placeholder="Username">
+        </div>
+      </div>
+      <div class="!mt-4">
+        <label for="" class=" text-2xl font-Lora">Password</label>
+        <div class="flex flex-row justify-between items-center border-b-5 border-primary">
+          <lucide-icon [img]="Lock"></lucide-icon>
+          <input type="Password" name="password" [(ngModel)]="password" class="!text-lg p-2 pl-2 focus:outline-0 w-full border-gray-400 !mt-1" id="" placeholder="Password">
+        </div>
+      </div>
+      <!-- <div class="!mt-4 w-full flex justify-end">
+        <span class=" text-lg">Forgot Password</span>
+      </div> -->
+      <div class="flex flex-col items-center gap-3 mt-4">
+        <input type="submit" value="Sign In" class="w-full bg-primary p-3 !rounded-full !text-white !mt-4">
+        <span *ngIf="canShowCreateAccount" (click)="showUserList()" class="text-xl font-Playfair font-semibold">
+          Create Account
+        </span>
+      </div>
+      <ion-text color="danger" *ngIf="errorMessage">{{ errorMessage }}</ion-text>
+    </form>
+  </div>
+</div>
+@if (isListVisible) {
+  <div class="h-[80vh] overflow-auto p-3 w-[90%] absolute z-50 border-t-7 border-cyan-300 top-0 bg-white rounded-3xl shadow-md right-[50%] translate-x-[50%] top-[50%] translate-y-[-50%]">
+    <div class="flex flex-row justify-between items-center">
+      <header class=" text-2xl pl-2 pt-2 font-semibold">Select Account</header>
+      <lucide-icon [img]="Close" (click)="closeList()"></lucide-icon>
+    </div>
+    <div>
+      <form class="!mt-1 p-2">
+        <div class="mt-2">
+            <label for="" class="text-2xl font-Playfair">Search</label>
+            <input 
+              type="text" 
+              placeholder="Search"
+              class="w-full p-2 rounded-md border"
+              [(ngModel)]="searchTerm"
+              name="search"
+              (input)="filterUsers()"
+            >
+        </div>
+        <div class="overflow-hide h-[50%] overflow-auto">
+          @for (user of filteredUsers; track $index) {
+            <div class="w-full mt-2 py-3 p-1 flex justify-between flex-row items-center">
+              <div>
+                {{ user.firstname }} {{ user.lastname }}
+              </div>
+              <div>
+                <button class="flex flex-row items-center !px-4 mr-2 !rounded-md !py-2 bg-primary text-white" (click)="requestAccount(user.s_bpartner_employee_id!)">Select</button>
+              </div>
+            </div>
+          }
+        </div>
+      </form>
+    </div>  
+  </div>
+}

@@ -1,0 +1,83 @@
+<div class="h-dvh w-full backgroundCover flex flex-col justify-start items-center">
+  <img src="../assets/logo2.png" class="w-4/6 mt-5" alt="">
+
+  <div class="w-[90%] rounded-[24px] border-2 border-black mt-10 p-2">
+    <div class="rounded-[18px] bg-white p-4">
+      <form>
+        <div>
+          <div>
+            <label for="" class="font-Playfair font-semibold text-xl">Select Employee</label>
+            <div class="flex flex-row justify-between gap-3">
+              <input type="text" name="nameSelected" [(ngModel)]="nameSelected" id="" class="w-full border p-3 rounded-md">
+              <button class="border !p-3 bg-primary text-white !px-5 !rounded-md" (click)="openList()">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="mt-2">
+          <label for="" class="font-Playfair font-semibold text-xl">Select Position</label>
+          <ion-list class="!p-0 !font-Playfair !font-semibold text-xl">
+            <ion-item>
+              <ion-select name="position_id" [(ngModel)]="UserAccess.position_id" >
+                <div slot="label">Select Position</div>
+                  @for (Position of PositionList; track $index) {
+                    <ion-select-option class="font-Playfair font-semibold text-xl" value={{Position.position_id}}>{{Position.position}}</ion-select-option>
+                  }
+              </ion-select>
+            </ion-item>
+          </ion-list>
+        </div>
+        <div class="w-full border rounded-md border-amber-950 mt-4 p-4">
+          <span class="border-b-2 font-Playfair font-semibold text-xl">List of Access</span>
+          <div class="flex flex-col gap-2 mt-3 font-Lora">
+            <div class="flex gap-2 items-center justify-start">
+              <input type="checkbox" [(ngModel)]="UserAccessLineFields.access_type" name="access_type" id="insert" (change)="Insert()">
+              <label for="insert">Insert Information</label>
+            </div>
+            <div class="flex gap-2 items-center justify-start">
+              <input type="checkbox" name="" id="update" (change)="Update()">
+              <label for="update">Update Information</label>
+            </div>
+            <div class="flex gap-2 items-center justify-start">
+              <input type="checkbox" name="" id="remove" (change)="Remove()">
+              <label for="remove">Remove Information</label>
+            </div>
+          </div>
+        </div>
+        <button 
+          type="button" 
+          class="!p-3 !rounded-md w-full bg-primary text-white mt-4"
+          (click)="confirmBeforeSubmit()">
+          Save Changes
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+<app-modal [isVisible]="listisVisible" [titleHeader]="listtitleHeader" (closeModal)="closeNoteModal()">
+  <form>
+    <div class="mt-2">
+      <label for="" class="text-2xl font-Playfair">Search</label>
+      <input 
+        type="text" 
+        placeholder="Search"
+        class="w-full p-2 rounded-md border"
+        [(ngModel)]="searchTerm"
+        name="search"
+        (input)="filterUsers()"
+      >
+    </div>
+    <div class="max-h-[300px] overflow-auto mt-6 duration-100">
+      @for (user of filteredUsers; track $index) {
+        <div class="border-b-2 p-2 flex flex-row justify-between">
+          <div>
+            {{ user.firstname }} {{ user.lastname }}
+          </div>
+          <div>
+            <button class="!p-2 bg-primary text-white !rounded-md" (click)="getId(user.s_bpartner_employee_id!)">Assign</button>
+          </div>
+        </div>
+      }
+    </div>
+  </form>
+</app-modal>
+
