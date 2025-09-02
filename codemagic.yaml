@@ -3,7 +3,7 @@ workflows:
     name: Build Unsigned iOS IPA (Ionic)
     max_build_duration: 60
     environment:
-      node: 20.11.1   # Node 20+
+      node: 20.19.0
       xcode: 15.2
       cocoapods: default
     scripts:
@@ -36,6 +36,11 @@ workflows:
             -exportOptionsPlist ./exportOptions.plist \
             -exportPath $CM_BUILD_DIR/build/ipa \
             CODE_SIGNING_ALLOWED=NO
+      - name: Add iOS platform if missing
+        script: |
+          if [ ! -d "ios" ]; then
+            npx cap add ios
+          fi
     artifacts:
       - build/ipa/*.ipa
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
