@@ -12,14 +12,13 @@ workflows:
           npm install -g @ionic/cli
           npm ci
           npm install @capacitor/ios
+      - name: Build Ionic app
+        script: |
+          ionic build   # this creates ./www
       - name: Add iOS platform
         script: |
           npx cap add ios || echo "iOS already added"
           npx cap sync ios
-      - name: Build Ionic app
-        script: |
-          ionic build
-          npx cap copy ios
       - name: Install CocoaPods
         script: |
           cd ios/App
