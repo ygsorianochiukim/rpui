@@ -3,7 +3,7 @@ workflows:
     name: Build Unsigned iOS IPA (Ionic)
     max_build_duration: 60
     environment:
-      node: 18.18.2
+      node: 20.11.1   # Node 20+
       xcode: 15.2
       cocoapods: default
     scripts:
@@ -39,4 +39,3 @@ workflows:
     artifacts:
       - build/ipa/*.ipa
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
-
