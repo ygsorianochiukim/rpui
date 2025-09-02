@@ -14,7 +14,7 @@ workflows:
           npm install @capacitor/ios
       - name: Build Ionic app
         script: |
-          ionic build   # this creates ./www
+          ionic build   # generates ./www
       - name: Add iOS platform
         script: |
           npx cap add ios || echo "iOS already added"
@@ -23,24 +23,6 @@ workflows:
         script: |
           cd ios/App
           pod install
-      - name: Create exportOptions.plist
-        script: |
-          cat <<EOF > ios/App/exportOptions.plist
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>method</key>
-            <string>ad-hoc</string>
-            <key>signingStyle</key>
-            <string>manual</string>
-            <key>stripSwiftSymbols</key>
-            <true/>
-            <key>compileBitcode</key>
-            <false/>
-          </dict>
-          </plist>
-          EOF
       - name: Build unsigned archive
         script: |
           cd ios/App
@@ -51,13 +33,13 @@ workflows:
             -configuration Release \
             archive -archivePath $CM_BUILD_DIR/build/App.xcarchive \
             CODE_SIGNING_ALLOWED=NO
-      - name: Export unsigned IPA
+      - name: Package unsigned IPA manually
         script: |
-          xcodebuild -exportArchive \
-            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
-            -exportOptionsPlist ios/App/exportOptions.plist \
-            -exportPath $CM_BUILD_DIR/build/ipa \
-            CODE_SIGNING_ALLOWED=NO
+          mkdir -p Payload
+          cp -r $CM_BUILD_DIR/build/App.xcarchive/Products/Applications/App.app Payload/
+          zip -r App.ipa Payload
+          mkdir -p $CM_BUILD_DIR/build/ipa
+          mv App.ipa $CM_BUILD_DIR/build/ipa/App-unsigned.ipa
     artifacts:
       - build/ipa/*.ipa
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
