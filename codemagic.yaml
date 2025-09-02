@@ -11,14 +11,11 @@ workflows:
         script: |
           npm install -g @ionic/cli
           npm ci
-      - name: Ensure iOS platform
-        script: |
-          if [ ! -d "ios" ]; then
-            npx cap add ios
-          fi
           npm install @capacitor/ios
+      - name: Add iOS platform
+        script: |
+          npx cap add ios || echo "iOS already added"
           npx cap sync ios
-          
       - name: Build Ionic app
         script: |
           ionic build
