@@ -11,17 +11,38 @@ workflows:
         script: |
           npm install -g @ionic/cli
           npm ci
-      - name: Build Ionic app
+      - name: Ensure iOS platform
         script: |
-          ionic build
           if [ ! -d "ios" ]; then
             npx cap add ios
           fi
           npx cap sync ios
+      - name: Build Ionic app
+        script: |
+          ionic build
+          npx cap copy ios
       - name: Install CocoaPods
         script: |
           cd ios/App
           pod install
+      - name: Create exportOptions.plist
+        script: |
+          cat <<EOF > ios/App/exportOptions.plist
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key>
+            <string>ad-hoc</string>
+            <key>signingStyle</key>
+            <string>manual</string>
+            <key>stripSwiftSymbols</key>
+            <true/>
+            <key>compileBitcode</key>
+            <false/>
+          </dict>
+          </plist>
+          EOF
       - name: Build unsigned archive
         script: |
           cd ios/App
@@ -36,14 +57,9 @@ workflows:
         script: |
           xcodebuild -exportArchive \
             -archivePath $CM_BUILD_DIR/build/App.xcarchive \
-            -exportOptionsPlist ./exportOptions.plist \
+            -exportOptionsPlist ios/App/exportOptions.plist \
             -exportPath $CM_BUILD_DIR/build/ipa \
             CODE_SIGNING_ALLOWED=NO
-      - name: Add iOS platform if missing
-        script: |
-          if [ ! -d "ios" ]; then
-            npx cap add ios
-          fi
     artifacts:
       - build/ipa/*.ipa
       - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
