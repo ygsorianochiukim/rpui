@@ -1,0 +1,42 @@
+workflows:
+  ios-unsigned:
+    name: Build Unsigned iOS IPA (Ionic)
+    max_build_duration: 60
+    environment:
+      node: 18.18.2
+      xcode: 15.2
+      cocoapods: default
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install -g @ionic/cli
+          npm ci
+      - name: Build Ionic app
+        script: |
+          ionic build
+          npx cap sync ios
+      - name: Install CocoaPods
+        script: |
+          cd ios/App
+          pod install
+      - name: Build unsigned archive
+        script: |
+          cd ios/App
+          xcodebuild \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -sdk iphoneos \
+            -configuration Release \
+            archive -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+            CODE_SIGNING_ALLOWED=NO
+      - name: Export unsigned IPA
+        script: |
+          xcodebuild -exportArchive \
+            -archivePath $CM_BUILD_DIR/build/App.xcarchive \
+            -exportOptionsPlist ./exportOptions.plist \
+            -exportPath $CM_BUILD_DIR/build/ipa \
+            CODE_SIGNING_ALLOWED=NO
+    artifacts:
+      - build/ipa/*.ipa
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
+
