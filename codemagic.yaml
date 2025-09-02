@@ -14,6 +14,9 @@ workflows:
       - name: Build Ionic app
         script: |
           ionic build
+          if [ ! -d "ios" ]; then
+            npx cap add ios
+          fi
           npx cap sync ios
       - name: Install CocoaPods
         script: |
