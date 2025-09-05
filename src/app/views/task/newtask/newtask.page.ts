@@ -136,7 +136,7 @@ export class NewtaskPage implements OnInit {
     this.searchText = '';
     this.nameSelected = '';
     this.selectedFile = null;
-}
+  }
 
   constructor(
     private taskServices: TaskService,
