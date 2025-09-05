@@ -1,5 +1,6 @@
 export interface Taskmodel {
-    employee_name: string;
+    employee_name?: string,
+    position_id? : number,
     task_i_information_id? : string,
     task_name : string,
     description : string,

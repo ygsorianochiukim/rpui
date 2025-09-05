@@ -1,0 +1,131 @@
+<div class="h-dvh w-full backgroundCover flex flex-col justify-start items-center">
+  <img src="../assets/logo2.png" class="w-4/6 mt-5" alt="logo">
+
+  <div class="w-[90%] rounded-[24px] border-2 border-black mt-10 p-2">
+    <div class="rounded-[18px] bg-white p-4">
+      <div class="flex flex-row justify-between items-center">
+        <header class="text-2xl text-center mb-2 font-Playfair">Task Information</header>
+        <button type="button" class="!p-2 !px-4 !rounded-2xl bg-primary text-white" (click)="syncTask()">
+          Sync Task
+        </button>
+      </div>
+
+      <form (ngSubmit)="addTaskPosition()">
+        <!-- Position Selector -->
+        <div>
+          <label class="font-Playfair font-semibold text-xl">Position</label>
+          <ion-list class="!p-0 bg-none">
+            <ion-item class="w-full border pl-2 text-black rounded-md bg-none">
+              <ion-select
+                class="w-full"
+                name="position_id"
+                [(ngModel)]="TaskField.position_id"
+                placeholder="Select Position"
+              >
+                <ion-select-option
+                  *ngFor="let row of rows"
+                  [value]="row['position_id']"
+                >
+                  {{ row['position_name'] }}
+                </ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+        </div>
+
+        <!-- Task Name -->
+        <div class="mt-2">
+          <label class="font-Playfair font-semibold text-xl">Task Name</label>
+          <input
+            type="text"
+            name="task_name"
+            [(ngModel)]="TaskField.task_name"
+            placeholder="Task Name"
+            class="p-2 w-full rounded-md border mt-2"
+          />
+        </div>
+
+        <!-- Description -->
+        <div class="mt-2">
+          <label class="font-Playfair font-semibold text-xl">Description</label>
+          <textarea
+            name="description"
+            [(ngModel)]="TaskField.description"
+            class="p-2 w-full rounded-md border mt-2"
+            placeholder="Description"
+          ></textarea>
+        </div>
+
+        <!-- Due Date -->
+        <div class="mt-1 relative">
+          <label class="font-Playfair font-semibold text-xl">Due Date</label>
+          <ion-list class="!p-0 bg-none">
+            <ion-item class="w-full border pl-2 text-black rounded-md bg-none">
+              <ion-select
+                name="dueDateSelected"
+                [(ngModel)]="dueDateSelected"
+                placeholder="Select Due Date"
+                (ionChange)="dateSelected()"
+              >
+                <ion-select-option value="Today">Today</ion-select-option>
+                <ion-select-option value="Tomorrow">Tomorrow</ion-select-option>
+                <ion-select-option value="Next Week">Next Week</ion-select-option>
+                <ion-select-option value="datePicker">Pick a Date</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-list>
+
+          <!-- Date Picker Modal -->
+          <div
+            *ngIf="showDateSelection"
+            class="dateSelection p-4 bg-white rounded-md shadow-md z-50 absolute w-full"
+          >
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-semibold">Pick a Date</span>
+              <button type="button" class="text-red-500" (click)="close()">Close</button>
+            </div>
+            <ion-datetime
+              name="due_date"
+              [(ngModel)]="DueDateSelector"
+              presentation="date-time"
+              class="w-full"
+            ></ion-datetime>
+            <button
+              type="button"
+              class="mt-2 bg-primary text-white p-2 rounded-md w-full"
+              (click)="close()"
+            >
+              Confirm Date
+            </button>
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button
+          type="submit"
+          class="!p-4 w-full mt-4 rounded-md bg-primary text-white"
+        >
+          Submit Changes
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Position Availability Section -->
+  <header class="w-full pl-5 pt-5 font-bold font-Playfair text-2xl">
+    Position Availability
+  </header>
+  <div class="w-full p-5 flex flex-col gap-4 h-[40%] overflow-auto">
+    <div
+      class="w-full border p-4 rounded-2xl items-center flex flex-row justify-between"
+      *ngFor="let row of rows"
+    >
+      <div class="flex flex-col font-Playfair">
+        <span class="text-lg">{{ row['position_name'] }}</span>
+      </div>
+      <div>
+        <button class="bg-primary !p-2 !rounded-xl text-white">Edit</button>
+      </div>
+    </div>
+  </div>
+</div>

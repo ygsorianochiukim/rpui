@@ -8,20 +8,37 @@
           <div>
             <label for="" class="font-Playfair font-semibold text-xl">Select Employee</label>
             <div class="flex flex-row justify-between gap-3">
-              <input type="text" name="nameSelected" [(ngModel)]="nameSelected" id="" class="w-full border p-3 rounded-md">
+              <input type="text" name="nameSelected" [(ngModel)]="nameSelected" id="" class="w-full border p-3 rounded-md" disabled>
               <button class="border !p-3 bg-primary text-white !px-5 !rounded-md" (click)="openList()">+</button>
             </div>
           </div>
         </div>
         <div class="mt-2">
           <label for="" class="font-Playfair font-semibold text-xl">Select Position</label>
-          <ion-list class="!p-0 !font-Playfair !font-semibold text-xl">
+          <!-- <ion-list class="!p-0 !font-Playfair !font-semibold text-xl">
             <ion-item>
               <ion-select name="position_id" [(ngModel)]="UserAccess.position_id" >
                 <div slot="label">Select Position</div>
                   @for (Position of PositionList; track $index) {
                     <ion-select-option class="font-Playfair font-semibold text-xl" value={{Position.position_id}}>{{Position.position}}</ion-select-option>
                   }
+              </ion-select>
+            </ion-item>
+          </ion-list> -->
+          <ion-list class="!p-0 bg-none">
+            <ion-item class="w-full border pl-2 text-black rounded-md bg-none">
+              <ion-select
+                class="w-full"
+                name="position_id"
+                [(ngModel)]="UserAccess.position_id"
+                placeholder="Select Position"
+              >
+                <ion-select-option
+                  *ngFor="let row of rows"
+                  [value]="row['position_id']"
+                >
+                  {{ row['position_name'] }}
+                </ion-select-option>
               </ion-select>
             </ion-item>
           </ion-list>

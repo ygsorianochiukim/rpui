@@ -67,10 +67,8 @@ export class AccountconfigComponent implements OnInit {
   }
 
   verify() {
-
     this.isButtonDisabled = true;
     this.remainingTime = 15 * 60;
-
     this.timerInterval = setInterval(() => {
       if (this.remainingTime > 0) {
         this.remainingTime--;

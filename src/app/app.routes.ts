@@ -17,6 +17,7 @@ import { AccountconfigComponent } from './auth/GenerateAccount/accountconfig/acc
 import { MyteamPage } from './views/HR/myteam/myteam.page';
 import { AnnouncementPage } from './views/announcement/announcement.page';
 import { UserinformationPage } from './views/HR/user-information/userinformation.page';
+import { TaskpositionPage } from './views/task/taskposition/taskposition/taskposition.page';
 export const routes: Routes = [
   {
     path: '',
@@ -40,6 +41,7 @@ export const routes: Routes = [
       { path: 'task', component: TaskPage },
       { path: 'viewTask', component: ViewTaskPage },
       { path: 'position', component: PositionPage },
+      { path: 'defaultTask', component: TaskpositionPage },
       { path: 'taskinformation/:task_i_information_id', component: TaskinfoPage },
       { path: 'newTask', component: NewtaskPage },
       { path: 'taskReport', component: TaskReportPage },
@@ -52,4 +54,9 @@ export const routes: Routes = [
     component: AccountconfigComponent
   },
   { path: '**', redirectTo: 'login' },
+  {
+    path: 'taskposition',
+    loadComponent: () => import('./views/task/taskposition/taskposition/taskposition.page').then( m => m.TaskpositionPage)
+  },
+
 ];

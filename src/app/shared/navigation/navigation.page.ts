@@ -53,6 +53,7 @@ export class NavigationPage implements OnInit {
   constructor(private AuthServices : LoginService) {}
   subList: boolean = false;
   subListHR: boolean = false;
+  subListPlanner: boolean = true;
 
   ngOnInit() {
     this.fetchData();
