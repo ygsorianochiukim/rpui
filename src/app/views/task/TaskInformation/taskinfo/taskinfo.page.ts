@@ -22,7 +22,11 @@ import { FileService } from 'src/app/Services/Task/File/file.service';
 import { Taskfile } from 'src/app/Models/TaskFile/taskfile.model';
 import { TasklogsService } from 'src/app/Services/Task/Logs/tasklogs.service';
 import { Tasklogs } from 'src/app/Models/Task/Logs/tasklogs.model';
-
+import { IonSelectOption,
+  IonList,
+  IonItem,
+  IonSelect,
+  IonDatetime,} from '@ionic/angular/standalone';
 @Component({
   selector: 'app-taskinfo',
   templateUrl: './taskinfo.page.html',
@@ -34,6 +38,7 @@ import { Tasklogs } from 'src/app/Models/Task/Logs/tasklogs.model';
     HttpClientModule,
     LucideAngularModule,
     ModalComponent,
+    IonItem,IonList,IonDatetime,IonSelect,IonSelectOption
   ],
   providers: [
     TaskService,
@@ -44,7 +49,7 @@ import { Tasklogs } from 'src/app/Models/Task/Logs/tasklogs.model';
     TaskrepeatService,
     LoginService,
     FileService,
-    TasklogsService
+    TasklogsService,
   ],
 })
 export class TaskinfoPage implements OnInit {
@@ -62,16 +67,20 @@ export class TaskinfoPage implements OnInit {
     private TaskLogsServices : TasklogsService,
     private Routes : Router,
   ) {}
+  showDateSelection = false;
+  dueDateSelected: string = '';
   CompleteButton: boolean = false;
   idParam: number = Number(this.route.snapshot.paramMap.get('task_i_information_id')) || 0;
   TaskInfo: Taskmodel | null = null;
   stepisVisible: boolean = false;
   steptitleHeader: string = 'Steps Description';
   noteisVisible: boolean = false;
+  repeattitleHeader: string = 'Repeat Information';
+  repeatisVisible: boolean = false;
   notetitleHeader: string = 'Notes Description';
   taskisVisible: boolean = false;
   tasktitleHeader: string = 'Task Files Description';
-  dueDateisVisible: boolean = false;
+  dueisVisible: boolean = false;
   duetitleHeader: string = 'Update Due Date';
   TaskStepInfo: Tasksteps[] = [];
   TaskNoteInfo: Tasknotes[] = [];
@@ -103,9 +112,21 @@ export class TaskinfoPage implements OnInit {
     task_i_information_id: this.idParam,
     created_by: 0,
   };
+  DueDateField: TaskDue = {
+    task_i_information_id: 0,
+    due_date: '',
+    date_selected: '',
+    created_by: 0,
+  };
+  DueRepeatField: TaskRepeat = {
+    task_i_information_id: 0,
+    repeat_frequency: '',
+    created_by: 0
+  }
   taskFile : Taskfile[] = [];
   User : any;
   UserFunction : string = '';
+  DueDateSelector: string = new Date().toISOString();
   ngOnInit() {
     this.displayTaskInformation();
     this.fetchInformation();
@@ -116,12 +137,52 @@ export class TaskinfoPage implements OnInit {
       this.UserFunction = this.User.user_access.position.function;
       this.TaskLogsFields.s_bpartner_employee_id = this.User.s_bpartner_employee_id;
       this.TaskLogsFields.created_by = this.User.s_bpartner_employee_id;
+      this.DueDateField.created_by = this.User.s_bpartner_employee_id;
+      this.DueRepeatField.created_by = this.User.s_bpartner_employee_id;
       this.TaskServices.displayTaskInfo(this.idParam).subscribe((data) => {
         this.TaskInfo = data;
         if (this.TaskInfo.s_bpartner_employee_id == this.User.s_bpartner_employee_id) {
           this.CompleteButton = true;
         }
       });
+    });
+  }
+  dateSelected() {
+    if (this.dueDateSelected === 'datePicker') {
+      this.showDateSelection = true;
+    } else {
+      const dueDate = new Date();
+      if (this.dueDateSelected === 'Today') {
+      } else if (this.dueDateSelected === 'Tomorrow') {
+        dueDate.setDate(dueDate.getDate() + 1);
+      } else if (this.dueDateSelected === 'Next Week') {
+        dueDate.setDate(dueDate.getDate() + 7);
+      }
+      this.DueDateSelector = dueDate.toISOString();
+    }
+  }
+  submitDueDate(){
+    if (this.dueDateSelected === "datePicker") {
+      const originalDate = new Date(this.DueDateField.due_date);
+      const year = originalDate.getFullYear();
+      const month = String(originalDate.getMonth() + 1).padStart(2, '0');
+      const day = String(originalDate.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+      this.DueDateField.due_date = formattedDate;
+    } else {
+      const originalDate = new Date(this.DueDateSelector);
+      const year = originalDate.getFullYear();
+      const month = String(originalDate.getMonth() + 1).padStart(2, '0');
+      const day = String(originalDate.getDate()).padStart(2, '0');
+      const formattedDate = `${year}-${month}-${day}`;
+      this.DueDateField.due_date = formattedDate;
+    }
+    this.DueDateField.task_i_information_id = this.idParam;
+    this.DueDateField.date_selected = this.dueDateSelected;
+    this.TaskDueServices.newDueDate(this.DueDateField).subscribe(() =>{
+      this.dueisVisible = false;
+      this.displayTaskInformation();
+      this.showDateSelection=false;
     });
   }
   markAsDone(){
@@ -138,7 +199,9 @@ export class TaskinfoPage implements OnInit {
   stepVisible() {
     this.stepisVisible = true;
   }
-  
+  close() {
+    this.showDateSelection = false;
+  }
   closeStepModal() {
     this.stepisVisible = false;
   }
@@ -148,11 +211,17 @@ export class TaskinfoPage implements OnInit {
   closeNoteModal() {
     this.noteisVisible = false;
   }
-  dueDateVisible(){
-    this.dueDateisVisible = true;
+  repeatVisible(){
+    this.repeatisVisible = true;
   }
-  closeDueModal() {
-    this.dueDateisVisible = false;
+  closerepeatModal(){
+    this.repeatisVisible = false;
+  }
+  dueDateVisible(){
+    this.dueisVisible = true;
+  }
+  closetaskdueModal() {
+    this.dueisVisible = false;
   }
   taskVisible() {
     this.taskisVisible = true;
@@ -229,6 +298,13 @@ export class TaskinfoPage implements OnInit {
       };
       reader.readAsDataURL(this.selectedFile);
     }
+  }
+  addNewRepeat(){
+    this.DueRepeatField.task_i_information_id = this.idParam;
+    this.TaskRepeatServices.addRepeat(this.DueRepeatField).subscribe(() => {
+      this.displayTaskInformation();
+      this.repeatisVisible = false;
+    })
   }
   downloadFile(fileId: number) {
     this.TaskFileServices.downloadTaskFile(fileId).subscribe({

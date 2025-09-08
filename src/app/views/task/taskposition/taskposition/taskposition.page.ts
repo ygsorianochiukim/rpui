@@ -12,6 +12,7 @@ import {
   IonSelectOption,
   IonDatetime,
   IonButton,
+  AlertController,
 } from '@ionic/angular/standalone';
 import { TaskPositionService } from 'src/app/Services/Task/DefaultTask/task-position.service';
 import { TaskDue } from 'src/app/Models/Task/Due/task-due.model';
@@ -20,6 +21,7 @@ import { Taskmodel } from 'src/app/Models/Task/taskmodel';
 import { Positiontask } from 'src/app/Models/Task/PositionTask/positiontask';
 import { PositionService } from 'src/app/Services/Position/position.service';
 import { Position } from 'src/app/Models/Position/position';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-taskposition',
@@ -71,7 +73,9 @@ export class TaskpositionPage implements OnInit {
     private TaskDefaultServices: TaskPositionService,
     private TaskServices: TaskService,
     private TaskPositionServices: TaskPositionService,
-    private PositionServives: PositionService
+    private PositionServives: PositionService,
+    private alertController: AlertController,
+    private Routes : Router
   ) {}
 
   ngOnInit() {
@@ -113,14 +117,34 @@ export class TaskpositionPage implements OnInit {
       this.displayPositionList = data;
     });
   }
-
+  async addTaskPosition() {
+    const alert = await this.alertController.create({
+      header: 'Task added complete!',
+      message: 'Do you want to save this new Task?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => console.log('Alert canceled'),
+        },
+        {
+          text: 'OK',
+          role: 'confirm',
+          handler: () => {
+            this.newTaskPerPosition();
+            this.displayTaskBank();
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
   displayTaskBank(){
     this.TaskPositionServices.getAll().subscribe((data) => {
       this.TaskpositionList = data;
     });
   }
-
-  addTaskPosition() {
+  newTaskPerPosition(){
     this.TaskField.date_selected = this.dueDateSelected;
     if (this.dueDateSelected !== 'datePicker') {
       this.TaskField.due_date = this.DueDateSelector;
@@ -132,7 +156,31 @@ export class TaskpositionPage implements OnInit {
     });
   }
 
-  syncTask() {
+  async syncTask() {
+    const alert = await this.alertController.create({
+      header: 'Task added complete!',
+      message: 'Do you want to sync this Task?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => console.log('Alert canceled'),
+        },
+        {
+          text: 'OK',
+          role: 'confirm',
+          handler: () => {
+            this.TaskListSync();
+            this.displayTaskBank();
+          },
+        },
+      ],
+    });
+    await alert.present();
+  }
+
+
+  TaskListSync(){
     if (!this.TaskField.position_id) {
       console.error('No position selected for sync');
       return;
