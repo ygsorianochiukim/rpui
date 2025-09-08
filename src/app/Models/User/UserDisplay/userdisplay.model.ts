@@ -25,5 +25,6 @@ export interface Userdisplay {
 export interface Position{
     department?: string,
     function?: string,
+    position?: string,
 
 }

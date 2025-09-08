@@ -11,13 +11,11 @@
         </div>
         <lucide-icon [img]="ArrowLeft" class="absolute right-2 top-2" (click)="hide()"></lucide-icon>
       </div>
-      
       <ul class="font-Playfair">
         <li routerLink="/home" (click)="hide()" class="flex flex-row items-center gap-2">
           <lucide-icon [img]="Home"></lucide-icon> <p class=" text-lg">Home</p>
         </li>
-
-        @if (role == "HR") {
+        @if (role == "Human Resource Checker" || role == "Human Resource Maker" ) {
           <li (click)="viewSubHR()" class="flex flex-row items-center gap-2">
             <lucide-icon [img]="Users"></lucide-icon> <p class=" text-lg">Human Resource</p>
           </li>
@@ -32,14 +30,12 @@
         @if (function != "Maker") {
           <li routerLink="/myteam" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="Network"></lucide-icon> <p class=" text-lg">My Team</p></li>
         }
-        @if (function == "Planner") {
+        @if (function != "Maker") {
           <li routerLink="/defaultTask" class="flex flex-row items-center gap-2"><lucide-icon [img]="IdCardLanyard"></lucide-icon> <p class=" text-lg">Task</p></li>
         }
-
         <li (click)="viewSubNav()" class="flex flex-row items-center gap-2">
           <lucide-icon [img]="ListChecks"></lucide-icon> <p class=" text-lg">To Do List</p>
         </li>
-          
         @if(subList){
           <ul class="ml-4">
             <li routerLink="/newTask" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="ListPlus"></lucide-icon> <p class=" text-lg">Add Task</p></li>
@@ -47,7 +43,6 @@
             <li routerLink="/taskReport" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="ChartArea"></lucide-icon> <p class=" text-lg">Task Reports</p></li>
           </ul>
         }
-
         @if (function != "Maker") {
           <li routerLink="/announcements" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="Megaphone"></lucide-icon> <p class=" text-lg">Announcement</p></li>
         }

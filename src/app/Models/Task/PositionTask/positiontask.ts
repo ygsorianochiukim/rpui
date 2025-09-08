@@ -7,4 +7,10 @@ export interface Positiontask {
     due_date?: string,
     created_by?: number,
     date_selected?: string,
+    position?: position | null;
+}
+
+export interface position{
+    position?: string,
+    function?: string,
 }

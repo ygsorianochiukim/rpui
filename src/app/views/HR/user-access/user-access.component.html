@@ -34,10 +34,10 @@
                 placeholder="Select Position"
               >
                 <ion-select-option
-                  *ngFor="let row of rows"
-                  [value]="row['position_id']"
+                  *ngFor="let row of PositionList"
+                  [value]="row.position_id"
                 >
-                  {{ row['position_name'] }}
+                  {{ row.position }}
                 </ion-select-option>
               </ion-select>
             </ion-item>

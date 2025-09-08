@@ -87,7 +87,6 @@ export class UserAccessComponent implements OnInit {
   ngOnInit() {
     this.dropdownUser();
     this.fetchUser();
-    this.displayPosition();
     this.filteredUsers = this.UserList;
   }
 
@@ -146,22 +145,6 @@ export class UserAccessComponent implements OnInit {
   }
   Remove() {
     this.accessType.push('Remove');
-  }
-  displayPosition() {
-    this.TaskPositionServices.getSheetData().subscribe((data: any) => {
-      const headers = data[0];
-      const display = data.slice(1);
-      this.rows = display
-        .filter((r: string[]) => r[1] && r[1].trim() !== '')
-        .map((row: string[]) => {
-          let obj: any = {};
-          headers.forEach((h: string, i: number) => {
-            obj[h] = row[i] || '';
-          });
-          return obj;
-        });
-      this.headers = headers;
-    });
   }
   async confirmBeforeSubmit() {
     const alert = await this.alertController.create({

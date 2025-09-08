@@ -18,6 +18,8 @@ import { TaskDue } from 'src/app/Models/Task/Due/task-due.model';
 import { TaskService } from 'src/app/Services/Task/task.service';
 import { Taskmodel } from 'src/app/Models/Task/taskmodel';
 import { Positiontask } from 'src/app/Models/Task/PositionTask/positiontask';
+import { PositionService } from 'src/app/Services/Position/position.service';
+import { Position } from 'src/app/Models/Position/position';
 
 @Component({
   selector: 'app-taskposition',
@@ -33,7 +35,7 @@ import { Positiontask } from 'src/app/Models/Task/PositionTask/positiontask';
     FormsModule,
     IonDatetime,
   ],
-  providers: [TaskPositionService, TaskService],
+  providers: [TaskPositionService, TaskService, PositionService],
 })
 export class TaskpositionPage implements OnInit {
   position: any;
@@ -48,11 +50,13 @@ export class TaskpositionPage implements OnInit {
     task_name: '',
     description: '',
     task_category: 'Task',
-    created_by: 3723, // ✅ replace with logged-in user id
+    created_by: 3723,
     position_id: 0,
     date_selected: '',
     due_date: '',
   };
+
+  TaskpositionList: Positiontask[] = [];
 
   DueDateField: TaskDue = {
     task_i_information_id: 0,
@@ -61,15 +65,19 @@ export class TaskpositionPage implements OnInit {
     created_by: 0,
   };
 
+  displayPositionList: Position[] = [];
+
   constructor(
     private TaskDefaultServices: TaskPositionService,
     private TaskServices: TaskService,
-    private TaskPositionServices: TaskPositionService
+    private TaskPositionServices: TaskPositionService,
+    private PositionServives: PositionService
   ) {}
 
   ngOnInit() {
     this.displayPosition();
     this.dateSelected();
+    this.displayTaskBank();
   }
 
   dateSelected() {
@@ -101,24 +109,18 @@ export class TaskpositionPage implements OnInit {
   }
 
   displayPosition() {
-    this.TaskDefaultServices.getSheetData().subscribe((data: any) => {
-      const headers = data[0];
-      const display = data.slice(1);
-      this.rows = display
-        .filter((r: string[]) => r[1] && r[1].trim() !== '')
-        .map((row: string[]) => {
-          let obj: any = {};
-          headers.forEach((h: string, i: number) => {
-            obj[h] = row[i] || '';
-          });
-          return obj;
-        });
-      this.headers = headers;
+    this.PositionServives.displayPosition().subscribe((data) => {
+      this.displayPositionList = data;
+    });
+  }
+
+  displayTaskBank(){
+    this.TaskPositionServices.getAll().subscribe((data) => {
+      this.TaskpositionList = data;
     });
   }
 
   addTaskPosition() {
-    // ✅ make sure due date and selected option are included
     this.TaskField.date_selected = this.dueDateSelected;
     if (this.dueDateSelected !== 'datePicker') {
       this.TaskField.due_date = this.DueDateSelector;

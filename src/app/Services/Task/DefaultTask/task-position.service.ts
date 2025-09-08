@@ -9,18 +9,8 @@ import { Positiontask } from 'src/app/Models/Task/PositionTask/positiontask';
   providedIn: 'root'
 })
 export class TaskPositionService {
-  private sheetUrl  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQhfDvacnU7LEPnqEGRB40PTr2i5kCeMsdxOC6-jbDlV7tcKf5b8unbxZCiADuh0iJuE-TJ6h5-EmCn/pub?gid=755485427&single=true&output=csv';
   private apiUrl = `${environment.apiUrl}/task-bank`;
   constructor(private http: HttpClient) {}
-
-  getSheetData() {
-    return this.http.get(this.sheetUrl, { responseType: 'text' }).pipe(
-      map(csv => {
-        const parsed = parse(csv, { header: false });
-        return parsed.data;
-      })
-    );
-  }
   getAll(): Observable<Positiontask[]> {
     return this.http.get<Positiontask[]>(this.apiUrl);
   }

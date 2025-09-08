@@ -62,7 +62,7 @@ export class NavigationPage implements OnInit {
   fetchData(){
     this.AuthServices.getUserFromAPI().subscribe(userData => {
       this.User = userData;
-      this.role = this.User?.user_access.position.department;
+      this.role = this.User?.user_access.position.position;
       this.function = this.User?.user_access.position.function;
     });
   }

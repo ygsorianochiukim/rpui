@@ -11,7 +11,6 @@
       </div>
 
       <form (ngSubmit)="addTaskPosition()">
-        <!-- Position Selector -->
         <div>
           <label class="font-Playfair font-semibold text-xl">Position</label>
           <ion-list class="!p-0 bg-none">
@@ -23,17 +22,15 @@
                 placeholder="Select Position"
               >
                 <ion-select-option
-                  *ngFor="let row of rows"
-                  [value]="row['position_id']"
+                  *ngFor="let row of displayPositionList"
+                  [value]="row.position_id"
                 >
-                  {{ row['position_name'] }}
+                  {{ row.position }}
                 </ion-select-option>
               </ion-select>
             </ion-item>
           </ion-list>
         </div>
-
-        <!-- Task Name -->
         <div class="mt-2">
           <label class="font-Playfair font-semibold text-xl">Task Name</label>
           <input
@@ -44,8 +41,6 @@
             class="p-2 w-full rounded-md border mt-2"
           />
         </div>
-
-        <!-- Description -->
         <div class="mt-2">
           <label class="font-Playfair font-semibold text-xl">Description</label>
           <textarea
@@ -55,8 +50,6 @@
             placeholder="Description"
           ></textarea>
         </div>
-
-        <!-- Due Date -->
         <div class="mt-1 relative">
           <label class="font-Playfair font-semibold text-xl">Due Date</label>
           <ion-list class="!p-0 bg-none">
@@ -74,8 +67,6 @@
               </ion-select>
             </ion-item>
           </ion-list>
-
-          <!-- Date Picker Modal -->
           <div
             *ngIf="showDateSelection"
             class="dateSelection p-4 bg-white rounded-md shadow-md z-50 absolute w-full"
@@ -110,21 +101,17 @@
       </form>
     </div>
   </div>
-
-  <!-- Position Availability Section -->
   <header class="w-full pl-5 pt-5 font-bold font-Playfair text-2xl">
-    Position Availability
+    Task Bank
   </header>
   <div class="w-full p-5 flex flex-col gap-4 h-[40%] overflow-auto">
     <div
       class="w-full border p-4 rounded-2xl items-center flex flex-row justify-between"
-      *ngFor="let row of rows"
+      *ngFor="let row of TaskpositionList"
     >
       <div class="flex flex-col font-Playfair">
-        <span class="text-lg">{{ row['position_name'] }}</span>
-      </div>
-      <div>
-        <button class="bg-primary !p-2 !rounded-xl text-white">Edit</button>
+        <span class="text-lg">{{ row.task_name }}</span>
+        <span class="text-lg">{{ row.position?.position }}</span>
       </div>
     </div>
   </div>

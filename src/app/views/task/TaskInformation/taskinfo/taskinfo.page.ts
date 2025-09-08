@@ -71,6 +71,8 @@ export class TaskinfoPage implements OnInit {
   notetitleHeader: string = 'Notes Description';
   taskisVisible: boolean = false;
   tasktitleHeader: string = 'Task Files Description';
+  dueDateisVisible: boolean = false;
+  duetitleHeader: string = 'Update Due Date';
   TaskStepInfo: Tasksteps[] = [];
   TaskNoteInfo: Tasknotes[] = [];
   TaskDueDate: TaskDue[] = [];
@@ -145,6 +147,12 @@ export class TaskinfoPage implements OnInit {
   }
   closeNoteModal() {
     this.noteisVisible = false;
+  }
+  dueDateVisible(){
+    this.dueDateisVisible = true;
+  }
+  closeDueModal() {
+    this.dueDateisVisible = false;
   }
   taskVisible() {
     this.taskisVisible = true;
