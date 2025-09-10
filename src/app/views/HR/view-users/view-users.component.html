@@ -14,8 +14,9 @@
     @for (user of filteredUsers; track $index) {
       <div class="card p-2 border-b-2 border-primary flex flex-row justify-between items-center">
         <div>
-          <div class="font-semibold font-Playfair">
-            {{user.companyname}} {{user.lastname}}
+          <div class="font-semibold font-Playfair flex flex-col">
+            {{user.companyname! | cleanTitlecase }} {{user.lastname | titlecase}}
+            <span class="font-normal">{{user.user_access?.position?.position| titlecase}}</span>
           </div>
         </div>
         <div>

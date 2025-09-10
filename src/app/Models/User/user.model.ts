@@ -16,4 +16,15 @@ export interface User {
     tin_no?: number,
     hdmf_no?: number,
     phic_no?: number,
+    user_access?: {
+        position?: position | null;
+        function?: position | null;
+    }
+}
+
+export interface position{
+    department?: string,
+    function?: string,
+    position?: string,
+
 }

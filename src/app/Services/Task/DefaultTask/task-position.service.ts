@@ -26,9 +26,17 @@ export class TaskPositionService {
   delete(id: number): Observable<{ message: string }> {
     return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
   }
-
   syncByPosition(positionId: number, userId: number) {
     return this.http.post(`${this.apiUrl}/sync-by-position`, {
+      position_id: positionId,
+      user_id: userId
+    });
+  }
+  taskUpdate(id: number, payload: any): Observable<Positiontask> {
+    return this.http.put<Positiontask>(`${this.apiUrl}/${id}/update-sync`, payload);
+  }
+  syncSingleTask(taskBankId: number, positionId: number, userId: number): Observable<Positiontask> {
+    return this.http.post<Positiontask>(`${this.apiUrl}/${taskBankId}/sync`, {
       position_id: positionId,
       user_id: userId
     });

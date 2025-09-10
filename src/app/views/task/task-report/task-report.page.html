@@ -98,7 +98,7 @@
             <div class="flex items-center gap-4">
               <div class="flex items-center gap-4">
                 <div class="flex flex-col">
-                  <div class="flex gap-2 flex flex-col">
+                  <div class="flex gap-2 w-full flex flex-col">
                     <h3 class="font-semibold text-gray-800 !m-0 text-lg">{{ getDisplayName(user.name) }}</h3>
                     <span 
                       *ngIf="isTeamLeader(user)" 
@@ -174,19 +174,22 @@
             class="mt-6 space-y-3 animate-fade-in">
             <div *ngFor="let member of user.members" class="team-member-item bg-gray-50 rounded-xl relative hover:bg-gray-100 transition-colors duration-200">
               <div class="flex justify-between items-center">
-                <div class="flex flex-col">
-                  <h4 class="font-medium text-gray-800">{{ getDisplayName(member.name) }}</h4>
+                <div>
+                  <div class="flex flex-col">
+                    <h4 class="font-medium mt-1 text-gray-800">{{ getDisplayName(member.name) }}</h4>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2 text-sm">
+                      <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                      <span class="text-gray-600">{{ Math.round(member.ACTIVE || 0) }}% Active</span> |
+                    </div>
+                    <div class="flex items-center gap-2 text-sm">
+                      <div class="w-2 h-2 bg-red-400 rounded-full"></div>
+                      <span class="text-gray-600">{{ Math.round(member.DEADLINE || 0) }}% Pending</span>
+                    </div>
+                  </div>
                 </div>
-                <div class="flex items-center gap-3">
-                  <div class="flex items-center gap-2 text-sm">
-                    <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                    <span class="text-gray-600">{{ Math.round(member.ACTIVE || 0) }}% Active</span>
-                  </div>
-                  <div class="flex items-center gap-2 text-sm">
-                    <div class="w-2 h-2 bg-red-400 rounded-full"></div>
-                    <span class="text-gray-600">{{ Math.round(member.DEADLINE || 0) }}% Pending</span>
-                  </div>
-                  <div class="w-8 h-8">
+                <div class="w-12 h-12">
                     <canvas
                       baseChart
                       [data]="member.chart"
@@ -195,7 +198,6 @@
                       class="!w-full !h-full"
                     ></canvas>
                   </div>
-                </div>
               </div>
               <div *ngIf="member.members && member.members.length > 0" class="mt-3 ml-4">
                 <ng-container *ngFor="let subMember of member.members">

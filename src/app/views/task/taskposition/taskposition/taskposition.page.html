@@ -1,118 +1,199 @@
-<div class="h-dvh w-full backgroundCover flex flex-col justify-start items-center">
-  <img src="../assets/logo2.png" class="w-4/6 mt-5" alt="logo">
-
-  <div class="w-[90%] rounded-[24px] border-2 border-black mt-10 p-2">
-    <div class="rounded-[18px] bg-white p-4">
-      <div class="flex flex-row justify-between items-center">
-        <header class="text-2xl text-center mb-2 font-Playfair">Task Information</header>
-        <button type="button" class="!p-2 !px-4 !rounded-2xl bg-primary text-white" (click)="syncTask()">
-          Sync Task
-        </button>
-      </div>
-
-      <form (ngSubmit)="addTaskPosition()">
-        <div>
-          <label class="font-Playfair font-semibold text-xl">Position</label>
-          <ion-list class="!p-0 bg-none">
-            <ion-item class="w-full border pl-2 text-black rounded-md bg-none">
-              <ion-select
-                class="w-full"
-                name="position_id"
-                [(ngModel)]="TaskField.position_id"
-                placeholder="Select Position"
-              >
-                <ion-select-option
-                  *ngFor="let row of displayPositionList"
-                  [value]="row.position_id"
-                >
-                  {{ row.position }}
-                </ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
-        </div>
-        <div class="mt-2">
-          <label class="font-Playfair font-semibold text-xl">Task Name</label>
-          <input
-            type="text"
-            name="task_name"
-            [(ngModel)]="TaskField.task_name"
-            placeholder="Task Name"
-            class="p-2 w-full rounded-md border mt-2"
-          />
-        </div>
-        <div class="mt-2">
-          <label class="font-Playfair font-semibold text-xl">Description</label>
-          <textarea
-            name="description"
-            [(ngModel)]="TaskField.description"
-            class="p-2 w-full rounded-md border mt-2"
-            placeholder="Description"
-          ></textarea>
-        </div>
-        <div class="mt-1 relative">
-          <label class="font-Playfair font-semibold text-xl">Due Date</label>
-          <ion-list class="!p-0 bg-none">
-            <ion-item class="w-full border pl-2 text-black rounded-md bg-none">
-              <ion-select
-                name="dueDateSelected"
-                [(ngModel)]="dueDateSelected"
-                placeholder="Select Due Date"
-                (ionChange)="dateSelected()"
-              >
-                <ion-select-option value="Today">Today</ion-select-option>
-                <ion-select-option value="Tomorrow">Tomorrow</ion-select-option>
-                <ion-select-option value="Next Week">Next Week</ion-select-option>
-                <ion-select-option value="datePicker">Pick a Date</ion-select-option>
-              </ion-select>
-            </ion-item>
-          </ion-list>
-          <div
-            *ngIf="showDateSelection"
-            class="dateSelection p-4 bg-white rounded-md shadow-md z-50 absolute w-full"
+<div class="h-dvh w-full backgroundCover flex flex-col justify-center items-center pb-5">
+  <img src="../assets/logo2.png" class="w-4/6 mt-5" alt="logo" />
+  <div class="mt-10 w-full px-5 flex justify-end">
+    <button (click)="newTaskBank()" class="!px-4 !border !py-2 !rounded-full">
+      {{ isAdding ? 'Hide' : 'New Task Bank' }}
+    </button>
+  </div>
+  @if (taskFieldVisible) {
+    <div class="w-[95%] rounded-[24px] mt-5 border-blackp-2 h-[100%] overflow-auto">
+      <div class="rounded-[18px] p-4">
+        <div class="flex flex-row justify-between items-center">
+          <header class="text-2xl text-center mb-2 font-Playfair">
+            Task Information
+          </header>
+          <button
+            type="button"
+            class="!p-2 !px-4 !rounded-2xl bg-primary text-white"
+            (click)="syncTask()"
           >
-            <div class="flex justify-between items-center mb-2">
-              <span class="font-semibold">Pick a Date</span>
-              <button type="button" class="text-red-500" (click)="close()">Close</button>
-            </div>
-            <ion-datetime
-              name="due_date"
-              [(ngModel)]="DueDateSelector"
-              presentation="date-time"
-              class="w-full"
-            ></ion-datetime>
-            <button
-              type="button"
-              class="mt-2 bg-primary text-white p-2 rounded-md w-full"
-              (click)="close()"
-            >
-              Confirm Date
-            </button>
-          </div>
+            Sync Task
+          </button>
         </div>
 
-        <!-- Submit -->
-        <button
-          type="submit"
-          class="!p-4 w-full mt-4 rounded-md bg-primary text-white"
-        >
-          Submit Changes
-        </button>
-      </form>
-    </div>
-  </div>
-  <header class="w-full pl-5 pt-5 font-bold font-Playfair text-2xl">
-    Task Bank
-  </header>
-  <div class="w-full p-5 flex flex-col gap-4 h-[40%] overflow-auto">
-    <div
-      class="w-full border p-4 rounded-2xl items-center flex flex-row justify-between"
-      *ngFor="let row of TaskpositionList"
-    >
-      <div class="flex flex-col font-Playfair">
-        <span class="text-lg">{{ row.task_name }}</span>
-        <span class="text-lg">{{ row.position?.position }}</span>
+        <form (ngSubmit)="addTaskPosition()">
+          <div>
+            <label class="font-Playfair font-semibold text-xl">Position</label>
+            <ion-list class="!p-0 bg-none">
+              <ion-item class="w-full border pl-2 text-black rounded-md bg-none">
+                <ion-select
+                  class="w-full"
+                  name="position_id"
+                  [(ngModel)]="TaskField.position_id"
+                  placeholder="Select Position"
+                >
+                  <ion-select-option
+                    *ngFor="let row of displayPositionList"
+                    [value]="row.position_id"
+                  >
+                    {{ row.position }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
+          </div>
+          <div class="mt-2">
+            <label class="font-Playfair font-semibold text-xl">Task Name</label>
+            <input
+              type="text"
+              name="task_name"
+              [(ngModel)]="TaskField.task_name"
+              placeholder="Task Name"
+              class="p-2 w-full rounded-md border mt-2"
+            />
+          </div>
+          <div class="mt-2">
+            <label class="font-Playfair font-semibold text-xl">Description</label>
+            <textarea
+              name="description"
+              [(ngModel)]="TaskField.description"
+              class="p-2 w-full rounded-md border mt-2"
+              placeholder="Description"
+            ></textarea>
+          </div>
+          <header class="text-xl font-semibold mt-2 border-b-2 pb-2">
+            Add Steps
+          </header>
+          <div class="mt-2">
+            <label for="">Step Description</label>
+            <div class="flex flex-row gap-2 items-center justify-between">
+              <input type="text" name="task_steps_description" [(ngModel)]="TaskField.task_step" id="" class="w-full rounded-md border-amber-950 border p-3">
+            </div>
+          </div>
+          <header class="text-xl font-semibold mt-2 border-b-2 pb-2">
+            Add Notes
+          </header>
+          <div class="mt-2">
+            <label for="">Notes</label>
+            <textarea name="task_note" [(ngModel)]="TaskField.task_notes" id="" class="w-full rounded-md border-amber-950 border p-3 h-50"></textarea>
+          </div>
+          <header class="text-xl font-semibold mt-2 border-b-2 pb-2">
+            Add Files
+          </header>
+          <div class="mt-2">
+            <label for="">Files</label>
+            <div class="flex flex-row gap-2 items-center justify-between">
+              <input type="file" name="" (change)="onFileSelected($event)" id="" class="w-full rounded-md border-amber-950 border p-3">
+            </div>
+          </div>
+          <div class="mt-1 relative">
+            <label class="font-Playfair font-semibold text-xl">Due Date</label>
+            <ion-list class="!p-0 bg-none">
+              <ion-item class="w-full border pl-2 text-black rounded-md bg-none">
+                <ion-select
+                  name="dueDateSelected"
+                  [(ngModel)]="dueDateSelected"
+                  placeholder="Select Due Date"
+                  (ionChange)="dateSelected()"
+                >
+                  <ion-select-option value="Today">Today</ion-select-option>
+                  <ion-select-option value="Tomorrow">Tomorrow</ion-select-option>
+                  <ion-select-option value="Next Week"
+                    >Next Week</ion-select-option
+                  >
+                  <ion-select-option value="datePicker"
+                    >Pick a Date</ion-select-option
+                  >
+                </ion-select>
+              </ion-item>
+            </ion-list>
+            <div
+              *ngIf="showDateSelection"
+              class="dateSelection p-4 bg-white rounded-md shadow-md z-50 absolute w-full">
+              <div class="flex justify-between items-center mb-2">
+                <span class="font-semibold">Pick a Date</span>
+                <button type="button" class="text-red-500" (click)="close()">
+                  Close
+                </button>
+              </div>
+              <ion-datetime
+                name="due_date"
+                [(ngModel)]="DueDateSelector"
+                presentation="date-time"
+                class="w-full"
+              ></ion-datetime>
+              <button
+                type="button"
+                class="mt-2 bg-primary text-white p-2 rounded-md w-full"
+                (click)="close()"
+              >
+                Confirm Date
+              </button>
+            </div>
+            <header class="text-xl font-semibold mt-3 border-b-2 pb-2">
+              Repeat
+            </header>
+            <div class="mt-2">
+              <label for="">Repeat</label>
+
+              <ion-list class="!p-0 bg-none">
+                <ion-item  class="w-full border pl-2 text-black rounded-md bg-none">
+                  <ion-select name="repeat_frequency" [(ngModel)]="TaskField.repeat_frequency" placeholder="Repeat Freqency">
+                    <ion-select-option value="Daily">Daily</ion-select-option>
+                    <ion-select-option value="Weekdays">Weekdays</ion-select-option>
+                    <ion-select-option value="Monthly">Monthly</ion-select-option>
+                    <ion-select-option value="Yearly">Yearly</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-list>
+            </div>
+            <header class="text-xl font-semibold mt-3 border-b-2 pb-2">
+              Remind Me
+            </header>
+            <div class="mt-2">
+              <label for="">Remind</label>
+              <ion-list class="!p-0 bg-none">
+                <ion-item  class="w-full border pl-2 text-black rounded-md bg-none">
+                  <ion-select name="remind_task" [(ngModel)]="TaskField.remind_task" placeholder="Reminders">
+                    <ion-select-option value="Later Today">Later Today</ion-select-option>
+                    <ion-select-option value="Tomorrow">Tomorrow</ion-select-option>
+                    <ion-select-option value="Next Week">Next Week</ion-select-option>
+                    <ion-select-option value="Yearly">Pick a Date</ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-list>
+            </div>
+          </div>
+          <button type="submit" class="!p-4 w-full mt-4 rounded-md bg-primary text-white">
+            {{ isUpdating ? 'Update Task' : 'Submit Changes' }}
+          </button>
+        </form>
       </div>
     </div>
-  </div>
+  }
+  @if (taskFieldVisible == false){
+    <header class="w-full pl-5 pt-5 font-bold font-Playfair text-2xl">
+      Task Bank
+    </header>
+    <div class="w-full p-5 flex flex-col gap-4 h-[100%] overflow-auto">
+      <div
+        class="w-full border p-4 rounded-2xl items-center flex flex-row justify-between"
+        *ngFor="let row of TaskpositionList"
+      >
+        <div class="flex flex-col font-Playfair">
+          <span class="font-semibold text-xl">{{ row.task_name | titlecase }}</span>
+          <span class="text-lg">{{ row.position?.position }}</span>
+        </div>
+        <div class="flex flex-row gap-2">
+          <button type="button" class=" text-black" (click)="editTask(row)">
+            <lucide-icon [img]="Pencil"></lucide-icon>
+          </button>
+          <button type="button" class=" text-black" (click)="sync(row)">
+            <lucide-icon [img]="Sync"></lucide-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+  
 </div>

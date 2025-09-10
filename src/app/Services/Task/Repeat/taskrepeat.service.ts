@@ -24,4 +24,8 @@ export class TaskrepeatService {
   addRepeat(post: TaskRepeat) : Observable<TaskRepeat>{
     return this.http.post<TaskRepeat>(this.apiUrl,post);
   }
+
+  updateSelectedRepeatFrequency(id: number, taskRepeat: string): Observable<TaskRepeat>{
+    return this.http.put<TaskRepeat>(`${this.apiUrl}/update/${id}`, {repeat_frequency: taskRepeat} );
+  }
 }

@@ -28,5 +28,8 @@ export class TaskdueService {
   updateTaskDue(id:number): Observable<TaskDue>{
     return this.http.post<TaskDue>(`${this.apiUrl}/complete/${id}`, {});
   }
-  
+
+  updateSelectedDue(id: number, taskDue: string): Observable<TaskDue>{
+    return this.http.put<TaskDue>(`${this.apiUrl}/update/${id}`, {due_date: taskDue} );
+  }
 }

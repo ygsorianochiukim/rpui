@@ -10,10 +10,11 @@ import { environment } from 'src/environments/environment.prod';
 import { AppUpdate } from '@capawesome/capacitor-app-update';
 import { App } from '@capacitor/app';
 import { UpdateService } from './Services/Update/update.service';
+import { CleanTitlecasePipe } from './clean-titlecase.pipe';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  imports: [IonApp, IonRouterOutlet],
+  imports: [IonApp, IonRouterOutlet, CleanTitlecasePipe],
   providers: [OneSignal, UpdateService]
 })
 export class AppComponent implements OnInit {

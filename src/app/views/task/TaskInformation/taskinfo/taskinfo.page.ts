@@ -5,7 +5,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { TaskService } from 'src/app/Services/Task/task.service';
 import { HttpClientModule } from '@angular/common/http';
 import { Taskmodel } from 'src/app/Models/Task/taskmodel';
-import { LucideAngularModule, ChevronLeft , Download } from 'lucide-angular';
+import { LucideAngularModule, ChevronLeft , Download , Trash , Pencil } from 'lucide-angular';
 import { TaskstepService } from 'src/app/Services/TaskStep/taskstep.service';
 import { Tasksteps } from 'src/app/Models/TaskSteps/tasksteps.model';
 import { TasknoteService } from 'src/app/Services/TaskNote/tasknote.service';
@@ -54,6 +54,8 @@ import { IonSelectOption,
 })
 export class TaskinfoPage implements OnInit {
   readonly Download = Download;
+  readonly Trash = Trash;
+  readonly Pencil = Pencil;
   constructor(
     private TaskServices: TaskService,
     private route: ActivatedRoute,
@@ -67,6 +69,8 @@ export class TaskinfoPage implements OnInit {
     private TaskLogsServices : TasklogsService,
     private Routes : Router,
   ) {}
+  dueDateID : number = 0;
+  repeatDateID : number = 0;
   showDateSelection = false;
   dueDateSelected: string = '';
   CompleteButton: boolean = false;
@@ -162,28 +166,39 @@ export class TaskinfoPage implements OnInit {
     }
   }
   submitDueDate(){
-    if (this.dueDateSelected === "datePicker") {
-      const originalDate = new Date(this.DueDateField.due_date);
-      const year = originalDate.getFullYear();
-      const month = String(originalDate.getMonth() + 1).padStart(2, '0');
-      const day = String(originalDate.getDate()).padStart(2, '0');
-      const formattedDate = `${year}-${month}-${day}`;
-      this.DueDateField.due_date = formattedDate;
-    } else {
-      const originalDate = new Date(this.DueDateSelector);
-      const year = originalDate.getFullYear();
-      const month = String(originalDate.getMonth() + 1).padStart(2, '0');
-      const day = String(originalDate.getDate()).padStart(2, '0');
-      const formattedDate = `${year}-${month}-${day}`;
-      this.DueDateField.due_date = formattedDate;
+    if (this.dueDateID) {
+      this.DueDateField.due_date = this.DueDateField.due_date;
+      this.TaskDueServices.updateSelectedDue(this.dueDateID, this.DueDateField.due_date).subscribe(() =>{
+        this.dueisVisible = false;
+        this.displayTaskInformation();
+        this.showDateSelection=false;
+      });
     }
-    this.DueDateField.task_i_information_id = this.idParam;
-    this.DueDateField.date_selected = this.dueDateSelected;
-    this.TaskDueServices.newDueDate(this.DueDateField).subscribe(() =>{
-      this.dueisVisible = false;
-      this.displayTaskInformation();
+    else{
       this.showDateSelection=false;
-    });
+      if (this.dueDateSelected === "datePicker") {
+        const originalDate = new Date(this.DueDateField.due_date);
+        const year = originalDate.getFullYear();
+        const month = String(originalDate.getMonth() + 1).padStart(2, '0');
+        const day = String(originalDate.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        this.DueDateField.due_date = formattedDate;
+      } else {
+        const originalDate = new Date(this.DueDateSelector);
+        const year = originalDate.getFullYear();
+        const month = String(originalDate.getMonth() + 1).padStart(2, '0');
+        const day = String(originalDate.getDate()).padStart(2, '0');
+        const formattedDate = `${year}-${month}-${day}`;
+        this.DueDateField.due_date = formattedDate;
+      }
+      this.DueDateField.task_i_information_id = this.idParam;
+      this.DueDateField.date_selected = this.dueDateSelected;
+      this.TaskDueServices.newDueDate(this.DueDateField).subscribe(() =>{
+        this.dueisVisible = false;
+        this.displayTaskInformation();
+        this.showDateSelection=false;
+      });
+    }
   }
   markAsDone(){
     this.TaskLogsServices.addTaskLogs(this.TaskLogsFields).subscribe(() => {});
@@ -217,8 +232,23 @@ export class TaskinfoPage implements OnInit {
   closerepeatModal(){
     this.repeatisVisible = false;
   }
+  editDueDate(task_due_date_id: number){
+    if (task_due_date_id) {
+      this.dueDateID = task_due_date_id;
+      this.dueisVisible = true;
+    }
+  }
+  editRepeatDate(task_repeat_id: number){
+    if (task_repeat_id) {
+      this.repeatDateID = task_repeat_id;
+      this.repeatisVisible = true;
+    }
+  }
   dueDateVisible(){
+    this.showDateSelection = false
     this.dueisVisible = true;
+    console.log(this.showDateSelection);
+    
   }
   closetaskdueModal() {
     this.dueisVisible = false;
@@ -300,11 +330,20 @@ export class TaskinfoPage implements OnInit {
     }
   }
   addNewRepeat(){
-    this.DueRepeatField.task_i_information_id = this.idParam;
-    this.TaskRepeatServices.addRepeat(this.DueRepeatField).subscribe(() => {
-      this.displayTaskInformation();
-      this.repeatisVisible = false;
-    })
+    if (this.repeatDateID) {
+      this.TaskRepeatServices.updateSelectedRepeatFrequency(this.repeatDateID, this.DueRepeatField.repeat_frequency)
+      .subscribe(()=> {
+        this.repeatisVisible = false;
+        this.displayTaskInformation();
+      });
+    }
+    else{
+      this.DueRepeatField.task_i_information_id = this.idParam;
+      this.TaskRepeatServices.addRepeat(this.DueRepeatField).subscribe(() => {
+        this.displayTaskInformation();
+        this.repeatisVisible = false;
+      })
+    }
   }
   downloadFile(fileId: number) {
     this.TaskFileServices.downloadTaskFile(fileId).subscribe({

@@ -6,12 +6,13 @@ import { User } from 'src/app/Models/User/user.model';
 import { UserService } from 'src/app/Services/User/user.service';
 import { LucideAngularModule , FunnelIcon , Plus, Eye } from "lucide-angular";
 import { Router, RouterLink } from '@angular/router';
+import { CleanTitlecasePipe } from 'src/app/clean-titlecase.pipe';
 
 @Component({
   selector: 'app-view-users',
   templateUrl: './view-users.component.html',
   styleUrls: ['./view-users.component.scss'],
-  imports: [CommonModule, FormsModule, HttpClientModule, LucideAngularModule],
+  imports: [CleanTitlecasePipe, CommonModule, FormsModule, HttpClientModule, LucideAngularModule],
   providers:[UserService],
 })
 export class ViewUsersComponent  implements OnInit {

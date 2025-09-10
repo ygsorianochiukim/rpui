@@ -17,6 +17,7 @@ import { LucideAngularModule , Trash2 } from 'lucide-angular';
 import { ModalComponent } from "src/app/shared/modal/modal.component";
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { CleanTitlecasePipe } from "../../../clean-titlecase.pipe";
 
 @Component({
   selector: 'app-myteam',
@@ -28,7 +29,8 @@ import { Router } from '@angular/router';
     FormsModule,
     HttpClientModule,
     LucideAngularModule,
-    ModalComponent
+    ModalComponent,
+    CleanTitlecasePipe
 ],
   providers: [UserService, TeamaccessService, LoginService],
 })
