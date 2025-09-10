@@ -5,7 +5,7 @@
   <div class="text-center mb-3">
     <header class="text-2xl font-Playfair font-semibold text-center flex flex-col">
       {{displayUserProfile.firstname | titlecase}} {{displayUserProfile.lastname | titlecase}}
-      <span class="text-lg font-light">"{{displayUserProfile.companyname | lowercase}}"</span>
+      <span class="text-lg font-light">"{{displayUserProfile.companyname! | cleanTitlecase}}"</span>
     </header>
     <span class="text-xl font-Lora">{{displayUserProfile.user_access?.position?.position}} - {{displayUserProfile.user_access?.position?.function}}</span>
   </div>

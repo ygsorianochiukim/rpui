@@ -38,6 +38,8 @@ export class MyteamPage implements OnInit {
   readonly Trash = Trash2;
   listisVisible: boolean = false;
   listtitleHeader: string = 'Users List'
+  selectedUsers: number[] = [];
+  selectedUserObjects: any[] = [];
   constructor(
     private UserServices: UserService,
     private TeamAccessServices: TeamaccessService,
@@ -78,8 +80,33 @@ export class MyteamPage implements OnInit {
   closeNoteModal(){
     this.listisVisible = false;
   }
-  openList(){
+  openList() {
+    this.filteredUsers = this.UserList;
+    this.searchTerm = '';
     this.listisVisible = true;
+  }
+  isAllSelected(): boolean {
+    return this.filteredUsers.length > 0 &&
+          this.filteredUsers.every(u => this.selectedUsers.includes(u.s_bpartner_employee_id));
+  }
+
+  toggleSelectAll(event: any) {
+    if (event.target.checked) {
+      this.filteredUsers.forEach(user => {
+        if (!this.selectedUsers.includes(user.s_bpartner_employee_id)) {
+          this.selectedUsers.push(user.s_bpartner_employee_id);
+          this.selectedUserObjects.push(user);
+        }
+      });
+    } else {
+      this.selectedUsers = this.selectedUsers.filter(id =>
+        !this.filteredUsers.some(u => u.s_bpartner_employee_id === id)
+      );
+      this.selectedUserObjects = this.selectedUserObjects.filter(u =>
+        !this.filteredUsers.some(fu => fu.s_bpartner_employee_id === u.s_bpartner_employee_id)
+      );
+    }
+    this.nameSelected = this.getSelectedNames();
   }
   fetchLoggedInUser(){
     this.AuthServices.getUserFromAPI().subscribe((LoggedInUser) => {
@@ -123,6 +150,7 @@ export class MyteamPage implements OnInit {
           role: 'confirm',
           handler: () => {
             this.SetTeam();
+            this.displayTeam();
             this.Router.navigate(['/myteam']);
           },
         },
@@ -132,19 +160,54 @@ export class MyteamPage implements OnInit {
     await alert.present();
   }
   SetTeam() {
-    this.MyTeamField.created_by = this.UserID;
-    this.MyTeamField.supervisor_id = this.UserID;
-    this.TeamAccessServices.addNewTask(this.MyTeamField).subscribe({
-      next: () => {
-        this.displayTeam();
-        setTimeout(() => {
-          this.Router.navigate(['/myteam']);
-        }, 100);
-      },
-      error: (err) => {
-        console.error('Error adding new task', err);
-      }
+    if (this.selectedUsers.length === 0) {
+      console.log("No users to assign");
+      return;
+    }
+
+    this.selectedUsers.forEach(userId => {
+      this.MyTeamField = {
+        s_bpartner_employee_id: userId,
+        supervisor_id: this.UserID,
+        created_by: this.UserID,
+      };
+
+      this.TeamAccessServices.addNewTask(this.MyTeamField).subscribe({
+        next: () => {
+          this.displayTeam();
+        },
+        error: (err) => console.error("Error adding new task", err),
+      });
     });
+    this.selectedUsers = [];
+    this.selectedUserObjects = [];
+    this.nameSelected = '';
+  }
+  toggleSelection(user: any, event: any) {
+    if (event.target.checked) {
+      if (!this.selectedUsers.includes(user.s_bpartner_employee_id)) {
+        this.selectedUsers.push(user.s_bpartner_employee_id);
+        this.selectedUserObjects.push(user);
+      }
+    } else {
+      this.selectedUsers = this.selectedUsers.filter(id => id !== user.s_bpartner_employee_id);
+      this.selectedUserObjects = this.selectedUserObjects.filter(u => u.s_bpartner_employee_id !== user.s_bpartner_employee_id);
+    }
+    this.nameSelected = this.getSelectedNames();
+  }
+
+  getSelectedNames(): string {
+    return this.selectedUserObjects.map(u => `${u.firstname} ${u.lastname}`).join(', ');
+  }
+
+  assignSelected() {
+    if (this.selectedUsers.length === 0) {
+      console.log("No users selected");
+      return;
+    }
+    this.nameSelected = this.getSelectedNames();
+    console.log("Selected users (pending save):", this.selectedUserObjects);
+    this.closeNoteModal();
   }
 
   displayTeam(){

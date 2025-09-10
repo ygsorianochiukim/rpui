@@ -38,7 +38,6 @@
       }
   </div>
 </div>
-
 <app-modal [isVisible]="listisVisible" [titleHeader]="listtitleHeader" (closeModal)="closeNoteModal()">
   <form>
     <div class="mt-2">
@@ -52,18 +51,39 @@
         (input)="filterUsers()"
       >
     </div>
-    <div class="max-h-[300px] overflow-auto mt-6 duration-100">
+
+    <!-- Check All -->
+    <div class="flex items-center gap-2 mt-4 border-b-2 p-2">
+      <input 
+        type="checkbox"
+        [checked]="isAllSelected()"
+        (change)="toggleSelectAll($event)"
+      >
+      <span class="font-semibold">Check All</span>
+    </div>
+
+    <!-- User List -->
+    <div class="max-h-[300px] overflow-auto mt-2 duration-100">
       @for (user of filteredUsers; track $index) {
-        <div class="border-b-2 p-2 flex flex-row justify-between">
-          <div>
+        <div class="border-b-2 p-2 flex flex-row justify-between items-center">
+          <div class="flex items-center gap-2">
+            <input 
+              type="checkbox"
+              [value]="user.s_bpartner_employee_id"
+              (change)="toggleSelection(user, $event)"
+              [checked]="selectedUsers.includes(user.s_bpartner_employee_id)"
+            >
             {{ user.firstname }} {{ user.lastname }}
-          </div>
-          <div>
-            <button class="!p-2 bg-primary text-white !rounded-md" (click)="getId(user.s_bpartner_employee_id!)">Assign</button>
           </div>
         </div>
       }
     </div>
+
+    <div class="mt-4 flex justify-end gap-2">
+      <button type="button" class="!p-2 bg-gray-400 text-white !rounded-md" (click)="closeNoteModal()">Cancel</button>
+      <button type="button" class="!p-2 bg-primary text-white !rounded-md" (click)="assignSelected()">Assign Selected</button>
+    </div>
   </form>
 </app-modal>
+
 

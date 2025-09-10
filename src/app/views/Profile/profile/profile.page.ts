@@ -9,13 +9,14 @@ import { User } from 'src/app/Models/User/user.model';
 import { UserService } from 'src/app/Services/User/user.service';
 import { LucideAngularModule ,Cake , MapPinHouse , Phone , Mail, VenusAndMars , Landmark } from 'lucide-angular';
 import { Userdisplay } from 'src/app/Models/User/UserDisplay/userdisplay.model';
+import { CleanTitlecasePipe } from "../../../clean-titlecase.pipe";
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.page.html',
   styleUrls: ['./profile.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, LucideAngularModule, CleanTitlecasePipe],
   providers: [LoginService, UserService],
 })
 export class ProfilePage implements OnInit {

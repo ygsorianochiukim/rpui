@@ -90,8 +90,8 @@ export class ViewTaskPage implements OnInit {
       this.Function = this.User?.user_access.position.function;
 
       if (this.Function != 'Maker') {
-        this.displayTask(this.status, this.type, this.assigned);
-        this.displayComplete();
+        this.displayUserTask(this.User?.s_bpartner_employee_id,this.status,this.type);
+        this.displayCompleteperUser();
         this.TeamsServices.teamDropDown(this.User?.s_bpartner_employee_id).subscribe((data) => {
           this.teamsList = data;
         });
