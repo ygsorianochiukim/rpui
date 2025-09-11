@@ -27,10 +27,10 @@
             </ul>
           }
         }
-        @if (function != "Maker") {
+        @if (function != "Maker" || function != null) {
           <li routerLink="/myteam" (click)="hide()" class="flex flex-row items-center gap-2"><lucide-icon [img]="Network"></lucide-icon> <p class=" text-lg">My Team</p></li>
         }
-        @if (function != "Maker") {
+        @if (function != "Maker" || function != null || role == "Audit Maker") {
           <li routerLink="/defaultTask" class="flex flex-row items-center gap-2"><lucide-icon [img]="IdCardLanyard"></lucide-icon> <p class=" text-lg">Task</p></li>
         }
         <li (click)="viewSubNav()" class="flex flex-row items-center gap-2">

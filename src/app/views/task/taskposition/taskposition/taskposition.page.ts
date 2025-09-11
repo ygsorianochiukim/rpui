@@ -59,6 +59,7 @@ export class TaskpositionPage implements OnInit {
   isUpdating: boolean = false;
   isAdding: boolean = false;
   LoginUserID : number = 0;
+  searchQuery: string = '';
   User: any;
   currentTaskId: number | null = null;
   TaskField: Positiontask = {
@@ -341,6 +342,15 @@ export class TaskpositionPage implements OnInit {
         }
       });
     }
+  }
+  get filteredTaskList(): Positiontask[] {
+    if (!this.searchQuery) return this.TaskpositionList;
+
+    const lowerQuery = this.searchQuery.toLowerCase();
+    return this.TaskpositionList.filter(task =>
+      task.task_name?.toLowerCase().includes(lowerQuery) ||
+      task.position?.position?.toLowerCase().includes(lowerQuery)
+    );
   }
   resetForm() {
     this.TaskField = {

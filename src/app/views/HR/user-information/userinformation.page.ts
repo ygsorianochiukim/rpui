@@ -7,13 +7,14 @@ import { UserService } from 'src/app/Services/User/user.service';
 import { LucideAngularModule ,Cake , MapPinHouse , Phone , Mail, VenusAndMars , Landmark  } from 'lucide-angular';
 import { Userdisplay } from 'src/app/Models/User/UserDisplay/userdisplay.model';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { CleanTitlecasePipe } from "../../../clean-titlecase.pipe";
 
 @Component({
   selector: 'app-userinformation',
   templateUrl: './userinformation.page.html',
   styleUrls: ['./userinformation.page.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule, HttpClientModule, CleanTitlecasePipe],
   providers: [UserService]
 })
 export class UserinformationPage implements OnInit {

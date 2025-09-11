@@ -3,10 +3,10 @@
     <img src="assets/icon.png" class="w-26 m-5" alt="">
   </div>
   <div class="text-center mb-3">
-    <header class="text-2xl font-Playfair font-semibold text-center ">
+    <header class="text-2xl font-Playfair font-semibold text-center flex flex-col items-center">
       {{displayUserProfile.firstname | titlecase}} {{displayUserProfile.lastname | titlecase}}
+      <span class="font-normal text-lg">"{{displayUserProfile.companyname! | cleanTitlecase}}"</span>
     </header>
-    <span class="text-xl font-Lora">{{displayUserProfile.user_access?.position?.department}} - {{displayUserProfile.user_access?.position?.function}}</span>
   </div>
   <div class="font-semibold p-5 rounded-2xl border-t-8 border-primary bg-white shadow-md">
     <header class="text-xl font-Playfair">About</header>

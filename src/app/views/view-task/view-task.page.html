@@ -6,13 +6,20 @@
   </div>
   <div class="w-full p-4 flex justify-between items-center mt-2">
     <header class="font-semibold text-3xl font-Playfair">Task List</header>
-    <div class="flex flex-row gap-2 items-center">
+    <div class="flex flex-row gap-3 items-center">
       <lucide-icon
         [img]="Funnel"
         size="30"
         [strokeWidth]="2"
         (click)="filterVisible()"
       ></lucide-icon>
+      <lucide-icon
+        [img]="Sync"
+        size="30"
+        [strokeWidth]="2"
+        (click)="restorePage()">
+
+      </lucide-icon>
     </div>
   </div>
   <div *ngIf="isFilterVisible" class="p-4 pt-0">
@@ -31,7 +38,7 @@
         </ion-list>
       </div>
     }
-    <div class="mt-2">
+    <!-- <div class="mt-2">
       <label for="" class=" font-lg text-xl">Status</label>
       <ion-list class="!p-0 !mt-2">
         <ion-item>
@@ -43,7 +50,7 @@
           </ion-select>
         </ion-item>
       </ion-list>
-    </div>
+    </div> -->
     <div class="mt-2">
       <label for="" class=" font-lg text-xl">Task Type</label>
       <ion-list class="!p-0 !mt-2">
@@ -66,7 +73,7 @@
         <div>
           <header class="font-semibold text-xl">{{task.task_name | titlecase}}</header>
           <span class="line-clamp-2 font-Lora"> {{task.due_date | date}} </span>
-          <span class="line-clamp-2 font-Lora">Assignee: <span class="text-black-950 ">{{task.firstname | titlecase}} {{task.lastname | titlecase}}</span></span>
+          <span class="line-clamp-2 font-Lora">Assignee: <span class="text-black-950 ">{{task.companyname| cleanTitlecase}} {{task.lastname | titlecase}}</span></span>
         </div>
         <div class="flex flex-row items-center gap-4">
           <span (click)="viewinfo(task.task_i_information_id)"> <lucide-icon [img]="Eye"></lucide-icon> </span>

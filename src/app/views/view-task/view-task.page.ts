@@ -7,7 +7,8 @@ import {
   CircleUserRound,
   Funnel,
   Eye,
-  Trash
+  Trash,
+  RefreshCcw
 } from 'lucide-angular';
 import { TaskService } from 'src/app/Services/Task/task.service';
 import { Taskmodel } from 'src/app/Models/Task/taskmodel';
@@ -27,6 +28,7 @@ import { User } from 'src/app/Models/User/user.model';
 import { UserService } from 'src/app/Services/User/user.service';
 import { TeamList } from 'src/app/Models/TeamHeirarchy/team-list';
 import { TeamaccessService } from 'src/app/Services/TeamAccess/teamaccess.service';
+import { CleanTitlecasePipe } from "../../clean-titlecase.pipe";
 
 @Component({
   selector: 'app-view-task',
@@ -42,10 +44,12 @@ import { TeamaccessService } from 'src/app/Services/TeamAccess/teamaccess.servic
     FormsModule,
     LucideAngularModule,
     HttpClientModule,
-  ],
+    CleanTitlecasePipe
+],
   providers: [TaskService, LoginService, TasklogsService, UserService, TeamaccessService],
 })
 export class ViewTaskPage implements OnInit {
+  readonly Sync = RefreshCcw;
   readonly Menu = Menu;
   readonly Circle = CircleUserRound;
   readonly Eye = Eye;
@@ -139,6 +143,10 @@ export class ViewTaskPage implements OnInit {
       );
     }
     this.isFilterVisible = false;
+  }
+  restorePage(){
+    this.displayuserLoggedIn();
+    this.displayUsers();
   }
 
   filterVisible() {

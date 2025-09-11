@@ -24,6 +24,7 @@ import type { OverlayEventDetail } from '@ionic/core';
 import { Router } from '@angular/router';
 import { ModalComponent } from 'src/app/shared/modal/modal.component';
 import { TaskPositionService } from 'src/app/Services/Task/DefaultTask/task-position.service';
+import { CleanTitlecasePipe } from "../../../clean-titlecase.pipe";
 @Component({
   selector: 'app-user-access',
   templateUrl: './user-access.component.html',
@@ -37,7 +38,8 @@ import { TaskPositionService } from 'src/app/Services/Task/DefaultTask/task-posi
     CommonModule,
     FormsModule,
     ModalComponent,
-  ],
+    CleanTitlecasePipe
+],
   providers: [
     UserService,
     PositionService,
@@ -72,7 +74,7 @@ export class UserAccessComponent implements OnInit {
   accessType: string[] = [];
   UserAccess: Useraccess = {
     s_bpartner_employee_id: 0,
-    position_id: '',
+    position_id: 0,
     created_by: 0,
   };
   UserAccessLineFields: Accessline = {
@@ -100,7 +102,7 @@ export class UserAccessComponent implements OnInit {
     const term = this.searchTerm.toLowerCase();
 
     this.filteredUsers = this.UserList.filter((user) =>
-      (user.firstname + ' ' + user.lastname).toLowerCase().includes(term)
+      (user.companyname + ' ' + user.lastname).toLowerCase().includes(term)
     );
   }
   fetchUser() {
@@ -173,8 +175,7 @@ export class UserAccessComponent implements OnInit {
     this.UserAccessServices.newuserAccess(this.UserAccess).subscribe(
       (AccessResponse: any) => {
         const accessID = AccessResponse.emp_i_user_access_id;
-        this.UserAccessLineFields.s_bpartner_employee_id =
-          this.UserAccess.s_bpartner_employee_id;
+        this.UserAccessLineFields.s_bpartner_employee_id = this.UserAccess.s_bpartner_employee_id;
         for (let i = 0; i < this.accessType.length; i++) {
           this.UserAccessLineFields.access_type = this.accessType[i];
           this.AccessLineServices.newAccessLine(
@@ -184,6 +185,11 @@ export class UserAccessComponent implements OnInit {
           });
         }
       }
+      
     );
+    this.TaskPositionServices.syncByPosition(this.UserAccess.position_id,this.UserAccess.s_bpartner_employee_id).subscribe({
+      next: (res) => console.log('Tasks synced successfully', res),
+      error: (err) => console.error('Task sync failed', err)
+    });
   }
 }

@@ -1,12 +1,12 @@
 <div class="h-dvh w-full backgroundCover flex flex-col justify-center items-center pb-5">
-  <img src="../assets/logo2.png" class="w-4/6 mt-5" alt="logo" />
+  <img src="assets/logo2.png" class="w-4/6 mt-5" alt="logo" />
   <div class="mt-10 w-full px-5 flex justify-end">
     <button (click)="newTaskBank()" class="!px-4 !border !py-2 !rounded-full">
       {{ isAdding ? 'Hide' : 'New Task Bank' }}
     </button>
   </div>
   @if (taskFieldVisible) {
-    <div class="w-[95%] rounded-[24px] mt-5 border-blackp-2 h-[100%] overflow-auto">
+    <div class="w-[95%] rounded-[24px] border-blackp-2 h-[100%] overflow-auto">
       <div class="rounded-[18px] p-4">
         <div class="flex flex-row justify-between items-center">
           <header class="text-2xl text-center mb-2 font-Playfair">
@@ -171,29 +171,39 @@
       </div>
     </div>
   }
-  @if (taskFieldVisible == false){
-    <header class="w-full pl-5 pt-5 font-bold font-Playfair text-2xl">
+  @if (taskFieldVisible == false) {
+    <header class="w-full pl-5 font-bold font-Playfair text-2xl">
       Task Bank
     </header>
+    <div class="px-5 mt-3 w-full rounded-full">
+      <input
+        type="text"
+        placeholder="Search Task..."
+        [(ngModel)]="searchQuery"
+        class="w-full p-3 border rounded-md"
+      />
+    </div>
+
     <div class="w-full p-5 flex flex-col gap-4 h-[100%] overflow-auto">
       <div
         class="w-full border p-4 rounded-2xl items-center flex flex-row justify-between"
-        *ngFor="let row of TaskpositionList"
+        *ngFor="let row of filteredTaskList"
       >
         <div class="flex flex-col font-Playfair">
           <span class="font-semibold text-xl">{{ row.task_name | titlecase }}</span>
           <span class="text-lg">{{ row.position?.position }}</span>
         </div>
         <div class="flex flex-row gap-2">
-          <button type="button" class=" text-black" (click)="editTask(row)">
+          <button type="button" class="text-black" (click)="editTask(row)">
             <lucide-icon [img]="Pencil"></lucide-icon>
           </button>
-          <button type="button" class=" text-black" (click)="sync(row)">
+          <button type="button" class="text-black" (click)="sync(row)">
             <lucide-icon [img]="Sync"></lucide-icon>
           </button>
         </div>
       </div>
     </div>
   }
+
   
 </div>
