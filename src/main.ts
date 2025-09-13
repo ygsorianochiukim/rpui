@@ -6,12 +6,14 @@ import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { importProvidersFrom } from '@angular/core';
 import { IonicStorageModule } from '@ionic/storage-angular';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptor } from './app/Services/Auth/auth.interceptor';
 
 bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(IonicStorageModule.forRoot(),HttpClientModule),
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy, },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     provideIonicAngular(),
     provideRouter(routes, withPreloading(PreloadAllModules)),
   ],

@@ -1,11 +1,12 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of, from, BehaviorSubject } from 'rxjs';
-import { switchMap, mapTo, tap } from 'rxjs/operators';
+import { Observable, of, from, BehaviorSubject, throwError } from 'rxjs';
+import { switchMap, mapTo, tap, catchError } from 'rxjs/operators';
 import { environment } from 'src/environments/environment.prod';
 import { Storage } from '@ionic/storage-angular';
 import { User } from 'src/app/Models/User/user.model';
-
+import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 @Injectable({
   providedIn: 'root'
 })
@@ -17,8 +18,18 @@ export class LoginService {
   setAuthState(state: boolean) {
     this.isAuthenticated.next(state);
   }
-  constructor(private http: HttpClient, private storage: Storage) {
+  constructor(private http: HttpClient, private storage: Storage, private router: Router, private ToastController: ToastController) {
     this.init();
+  }
+  private async showToast(message: string) {
+
+    const toast = await this.ToastController.create({
+      message,
+      duration: 3000,
+      color: 'warning',
+      position: 'top'
+    });
+    await toast.present();
   }
 
   private async init() {
@@ -26,32 +37,45 @@ export class LoginService {
   }
 
   login(username: string, password: string): Observable<any> {
-  return this.http.post(`${this.apiUrl}/login`, { username, password }).pipe(
-    switchMap((res: any) => {
-      const tasks: Promise<any>[] = [];
+    return this.http.post(`${this.apiUrl}/login`, { username, password }).pipe(
+      switchMap((res: any) => {
+        const tasks: Promise<any>[] = [];
 
-      if (res.access_token) {
-        tasks.push(this.storage.set('token', res.access_token));
-      }
-      if (res.user) {
-        tasks.push(this.storage.set('User', res.user));
-      }
+        if (res.access_token) {
+          tasks.push(this.storage.set('token', res.access_token));
+        }
+        if (res.user) {
+          tasks.push(this.storage.set('User', res.user));
+        }
 
-      return from(Promise.all(tasks)).pipe(
-        tap(() => this.setAuthState(true)),
-        mapTo(res)
-      );
-    })
-  );
-}
+        return from(Promise.all(tasks)).pipe(
+          tap(() => this.setAuthState(true)),
+          mapTo(res)
+        );
+      })
+    );
+  }
+  private handleAuthError(error: HttpErrorResponse): Observable<never> {
+    if (error.status === 401) {
+      // use the backend’s custom message if available
+      const message = 'You have been logged out. Please log in again.';
+      this.showToast(message);
+
+      this.storage.clear().then(() => {
+        this.setAuthState(false);
+        this.router.navigate(['/login']);
+      });
+    }
+    return throwError(() => error);
+  }
 
   getUserFromAPI(): Observable<any> {
     return from(this.storage.get('token')).pipe(
       switchMap(token => {
-        const headers = new HttpHeaders({
-          Authorization: `Bearer ${token}`
-        });
-        return this.http.get(`${this.apiUrl}/me`, { headers });
+        const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+        return this.http.get(`${this.apiUrl}/me`, { headers }).pipe(
+          catchError(err => this.handleAuthError(err))
+        );
       })
     );
   }
@@ -74,17 +98,16 @@ export class LoginService {
     return from(this.storage.get('token')).pipe(
       switchMap(token => {
         if (!token) {
-          throw new Error('No token found');
+          return from(this.storage.clear());
         }
         return this.http.post(
           `${this.apiUrl}/logout`,
           {},
           { headers: { Authorization: `Bearer ${token}` } }
+        ).pipe(
+          switchMap(() => from(this.storage.clear()))
         );
-      }),
-      switchMap(() => from(this.storage.remove('token'))),
-      switchMap(() => from(this.storage.remove('User'))),
-      tap(() => this.setAuthState(false))
+      })
     );
   }
 

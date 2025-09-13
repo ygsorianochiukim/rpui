@@ -59,17 +59,32 @@ export class LoginComponent implements OnInit {
     await this.storage.create();
     const user = await this.storage.get('User');
     const token = await this.storage.get('token');
+
     if (user && token) {
-      this.router.navigate(['/home']);
+      // Check if token is still valid by calling backend
+      this.authService.getUserFromAPI().subscribe({
+        next: () => {
+          this.router.navigate(['/home']); // valid token → go home
+        },
+        error: async (err) => {
+          if (err.status === 401) {
+            // Token expired/invalid → clear storage + redirect
+            await this.storage.clear();
+            this.router.navigate(['/login']);
+          }
+        }
+      });
     } else {
       this.displayUsersList();
     }
+
     this.filteredUsers = this.UserList;
 
     this.timer = setInterval(() => {
       this.currentTime = new Date();
     }, 1000);
   }
+
 
   ngOnDestroy() {
     if (this.timer) {
@@ -92,22 +107,6 @@ export class LoginComponent implements OnInit {
       (user.firstname + ' ' + user.lastname).toLowerCase().includes(term)
     );
   }
-  // login() {
-  //   this.errorMessage = '';
-  //   this.loading = true;
-  //   this.authService.login(this.emailOrUsername, this.password).subscribe({
-  //     next: async (res) => {
-  //       this.loading = false;
-  //       await this.storage.set('session', res);
-  //       this.router.navigate(['/home']); 
-  //     },
-  //     error: (err) => {
-  //       this.loading = false;
-  //       this.errorMessage = err.error?.message || 'Login failed';
-  //     }
-  //   });
-  // }
-
   login() {
     this.errorMessage = '';
     this.loading = true;
